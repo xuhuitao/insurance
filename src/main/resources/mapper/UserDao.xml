@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.rokyinfo.insurance.dao.UserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="net.rokyinfo.insurance.entity.UserEntity" id="userMap">
+        <result property="id" column="id"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifier" column="modifier"/>
+        <result property="creator" column="creator"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="status" column="status"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="email" column="email"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="headimgUrl" column="headimg_url"/>
+        <result property="belong" column="belong"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="net.rokyinfo.insurance.entity.UserEntity">
+		select * from u_user where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="net.rokyinfo.insurance.entity.UserEntity">
+		select * from u_user
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from u_user 
+	</select>
+	 
+	<insert id="save" parameterType="net.rokyinfo.insurance.entity.UserEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into u_user
+		(
+			`version`, 
+			`create_time`, 
+			`modifier`, 
+			`creator`, 
+			`modify_time`, 
+			`status`, 
+			`username`, 
+			`password`, 
+			`phone_number`, 
+			`email`, 
+			`nickname`, 
+			`gender`, 
+			`headimg_url`, 
+			`belong`
+		)
+		values
+		(
+			#{version}, 
+			#{createTime}, 
+			#{modifier}, 
+			#{creator}, 
+			#{modifyTime}, 
+			#{status}, 
+			#{username}, 
+			#{password}, 
+			#{phoneNumber}, 
+			#{email}, 
+			#{nickname}, 
+			#{gender}, 
+			#{headimgUrl}, 
+			#{belong}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="net.rokyinfo.insurance.entity.UserEntity">
+		update u_user 
+		<set>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="phoneNumber != null">`phone_number` = #{phoneNumber}, </if>
+			<if test="email != null">`email` = #{email}, </if>
+			<if test="nickname != null">`nickname` = #{nickname}, </if>
+			<if test="gender != null">`gender` = #{gender}, </if>
+			<if test="headimgUrl != null">`headimg_url` = #{headimgUrl}, </if>
+			<if test="belong != null">`belong` = #{belong}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from u_user where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from u_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
