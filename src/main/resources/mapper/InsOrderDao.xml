@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.rokyinfo.insurance.dao.InsOrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="net.rokyinfo.insurance.entity.InsOrderEntity" id="insOrderMap">
+        <result property="id" column="id"/>
+        <result property="version" column="version"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifier" column="modifier"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="status" column="status"/>
+        <result property="applicant" column="applicant"/>
+        <result property="idType" column="id_type"/>
+        <result property="idNumber" column="id_number"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="district" column="district"/>
+        <result property="brand" column="brand"/>
+        <result property="model" column="model"/>
+        <result property="vin" column="vin"/>
+        <result property="buyTime" column="buy_time"/>
+        <result property="buyPrice" column="buy_price"/>
+        <result property="billImg" column="bill_img"/>
+        <result property="scooterImg" column="scooter_img"/>
+        <result property="ccuSn" column="ccu_sn"/>
+        <result property="belong" column="belong"/>
+        <result property="productId" column="product_id"/>
+        <result property="solutionId" column="solution_id"/>
+        <result property="price" column="price"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="trxNo" column="trx_no"/>
+        <result property="payment" column="payment"/>
+        <result property="activationTime" column="activation_time"/>
+        <result property="expirationTime" column="expiration_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="net.rokyinfo.insurance.entity.InsOrderEntity">
+		select * from ins_order where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="net.rokyinfo.insurance.entity.InsOrderEntity">
+		select * from ins_order
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from ins_order 
+	</select>
+	 
+	<insert id="save" parameterType="net.rokyinfo.insurance.entity.InsOrderEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into ins_order
+		(
+			`version`, 
+			`creator`, 
+			`create_time`, 
+			`modifier`, 
+			`modify_time`, 
+			`status`, 
+			`applicant`, 
+			`id_type`, 
+			`id_number`, 
+			`province`, 
+			`city`, 
+			`district`, 
+			`brand`, 
+			`model`, 
+			`vin`, 
+			`buy_time`, 
+			`buy_price`, 
+			`bill_img`, 
+			`scooter_img`, 
+			`ccu_sn`, 
+			`belong`, 
+			`product_id`, 
+			`solution_id`, 
+			`price`, 
+			`order_no`, 
+			`trx_no`, 
+			`payment`, 
+			`activation_time`, 
+			`expiration_time`
+		)
+		values
+		(
+			#{version}, 
+			#{creator}, 
+			#{createTime}, 
+			#{modifier}, 
+			#{modifyTime}, 
+			#{status}, 
+			#{applicant}, 
+			#{idType}, 
+			#{idNumber}, 
+			#{province}, 
+			#{city}, 
+			#{district}, 
+			#{brand}, 
+			#{model}, 
+			#{vin}, 
+			#{buyTime}, 
+			#{buyPrice}, 
+			#{billImg}, 
+			#{scooterImg}, 
+			#{ccuSn}, 
+			#{belong}, 
+			#{productId}, 
+			#{solutionId}, 
+			#{price}, 
+			#{orderNo}, 
+			#{trxNo}, 
+			#{payment}, 
+			#{activationTime}, 
+			#{expirationTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="net.rokyinfo.insurance.entity.InsOrderEntity">
+		update ins_order 
+		<set>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="applicant != null">`applicant` = #{applicant}, </if>
+			<if test="idType != null">`id_type` = #{idType}, </if>
+			<if test="idNumber != null">`id_number` = #{idNumber}, </if>
+			<if test="province != null">`province` = #{province}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="district != null">`district` = #{district}, </if>
+			<if test="brand != null">`brand` = #{brand}, </if>
+			<if test="model != null">`model` = #{model}, </if>
+			<if test="vin != null">`vin` = #{vin}, </if>
+			<if test="buyTime != null">`buy_time` = #{buyTime}, </if>
+			<if test="buyPrice != null">`buy_price` = #{buyPrice}, </if>
+			<if test="billImg != null">`bill_img` = #{billImg}, </if>
+			<if test="scooterImg != null">`scooter_img` = #{scooterImg}, </if>
+			<if test="ccuSn != null">`ccu_sn` = #{ccuSn}, </if>
+			<if test="belong != null">`belong` = #{belong}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="solutionId != null">`solution_id` = #{solutionId}, </if>
+			<if test="price != null">`price` = #{price}, </if>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="trxNo != null">`trx_no` = #{trxNo}, </if>
+			<if test="payment != null">`payment` = #{payment}, </if>
+			<if test="activationTime != null">`activation_time` = #{activationTime}, </if>
+			<if test="expirationTime != null">`expiration_time` = #{expirationTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from ins_order where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from ins_order where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
