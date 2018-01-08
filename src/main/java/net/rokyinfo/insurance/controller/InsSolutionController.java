@@ -1,36 +1,36 @@
 package net.rokyinfo.insurance.controller;
 
+import java.util.List;
+import java.util.Map;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import net.rokyinfo.insurance.entity.UserEntity;
-import net.rokyinfo.insurance.service.UserService;
+import net.rokyinfo.insurance.entity.InsSolutionEntity;
+import net.rokyinfo.insurance.service.InsSolutionService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.List;
-import java.util.Map;
 /**
- * 用户表
+ * 保险产品方案表
  * 
- * @author zhijian.yuan
- * @email zhijian.yuan@gmail.com
- * @date 2018-01-05 13:18:54
+ * @author yangyang.cao
+ * @email yangyang.cao@gmail.com
+ * @date 2018-01-08 10:31:21
  */
 @RestController
-@RequestMapping("/insurance/user")
-public class UserController {
+@RequestMapping("/api-order/v3.1/inssolution")
+public class InsSolutionController {
+
 	@Autowired
-	private UserService userService;
+	private InsSolutionService insSolutionService;
 	
 	/**
 	 * 列表
 	 */
-	@ApiOperation(value = "列表", notes = "")
+	@ApiOperation(value = "保险产品方案列表", notes = "")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "params", value = "", required = false, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "page", value = "分页第几页示例：1", required = false, dataType = "String", paramType = "query"),
@@ -38,15 +38,15 @@ public class UserController {
 			@ApiImplicitParam(name = "sidx", value = "排序字段：id", required = false, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "order", value = "排序顺序：desc", required = false, dataType = "String", paramType = "query")}
 	)
-	@GetMapping("")
+	@GetMapping("/")
 	public R list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
-		List<UserEntity> userList = userService.queryList(query);
-		int total = userService.queryTotal(query);
+		List<InsSolutionEntity> insSolutionList = insSolutionService.queryList(query);
+		int total = insSolutionService.queryTotal(query);
 		
-		PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(insSolutionList, total, query.getLimit(), query.getPage());
 		
 		return R.ok().put("page", pageUtil);
 	}
@@ -60,19 +60,19 @@ public class UserController {
 	@ApiImplicitParam(name = "id", value = "", required = true, dataType = "Integer", paramType = "path")
 	@GetMapping("/{id}")
 	public R info(@PathVariable("id") Long id){
-		UserEntity user = userService.queryObject(id);
+		InsSolutionEntity insSolution = insSolutionService.queryObject(id);
 		
-		return R.ok().put("user", user);
+		return R.ok().put("insSolution", insSolution);
 	}
 	
 	/**
-	 * 保存
+	 * 新增
 	 */
 	@ApiOperation(value = "新增", notes = "")
-	@ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
+	@ApiImplicitParam(name = "insSolution", value = "", required = true, dataType = "InsSolutionEntity")
 	@PostMapping("/")
-	public R save(@RequestBody UserEntity user){
-		userService.save(user);
+	public R save(@RequestBody InsSolutionEntity insSolution){
+		insSolutionService.save(insSolution);
 		
 		return R.ok();
 	}
@@ -81,10 +81,10 @@ public class UserController {
 	 * 修改
 	 */
 	@ApiOperation(value = "修改", notes = "")
-	@ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
+	@ApiImplicitParam(name = "insSolution", value = "", required = true, dataType = "InsSolutionEntity")
 	@PutMapping("/")
-	public R update(@RequestBody UserEntity user){
-		userService.update(user);
+	public R update(@RequestBody InsSolutionEntity insSolution){
+		insSolutionService.update(insSolution);
 		
 		return R.ok();
 	}
@@ -96,7 +96,7 @@ public class UserController {
 	@ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
 	@DeleteMapping("/")
 	public R delete(@RequestBody Long[] ids){
-		userService.deleteBatch(ids);
+		insSolutionService.deleteBatch(ids);
 		
 		return R.ok();
 	}
