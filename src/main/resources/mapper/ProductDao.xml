@@ -1,37 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="net.rokyinfo.insurance.dao.UserDao">
+<mapper namespace="net.rokyinfo.insurance.dao.ProductDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="net.rokyinfo.insurance.entity.UserEntity" id="userMap">
+    <resultMap type="net.rokyinfo.insurance.entity.ProductEntity" id="insProductMap">
         <result property="id" column="id"/>
         <result property="version" column="version"/>
         <result property="createTime" column="create_time"/>
         <result property="modifier" column="modifier"/>
         <result property="creator" column="creator"/>
         <result property="modifyTime" column="modify_time"/>
+        <result property="remark" column="remark"/>
         <result property="status" column="status"/>
-        <result property="username" column="username"/>
-        <result property="password" column="password"/>
-        <result property="phoneNumber" column="phone_number"/>
-        <result property="email" column="email"/>
-        <result property="nickname" column="nickname"/>
-        <result property="gender" column="gender"/>
-        <result property="headimgUrl" column="headimg_url"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="desc" column="desc"/>
+        <result property="image" column="image"/>
+        <result property="price" column="price"/>
+        <result property="model" column="model"/>
+        <result property="outUrl" column="out_url"/>
         <result property="belong" column="belong"/>
     </resultMap>
 
-    <select id="queryObject" resultType="net.rokyinfo.insurance.entity.UserEntity">
-		select * from u_user where id = #{value}
+    <select id="queryObject" resultType="net.rokyinfo.insurance.entity.ProductEntity">
+		select * from ins_product where id = #{value}
 	</select>
 
-    <select id="queryUserByUserName" resultType="net.rokyinfo.insurance.entity.UserEntity">
-		select * from u_user where username = #{username}
-	</select>
-
-    <select id="queryList" resultType="net.rokyinfo.insurance.entity.UserEntity">
-        select * from u_user
+    <select id="queryList" resultType="net.rokyinfo.insurance.entity.ProductEntity">
+        select * from ins_product
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -46,25 +43,27 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from u_user 
+		select count(*) from ins_product 
 	</select>
 
-    <insert id="save" parameterType="net.rokyinfo.insurance.entity.UserEntity" useGeneratedKeys="true" keyProperty="id">
-		insert into u_user
+    <insert id="save" parameterType="net.rokyinfo.insurance.entity.ProductEntity" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into ins_product
 		(
 			`version`, 
 			`create_time`, 
 			`modifier`, 
 			`creator`, 
 			`modify_time`, 
+			`remark`, 
 			`status`, 
-			`username`, 
-			`password`, 
-			`phone_number`, 
-			`email`, 
-			`nickname`, 
-			`gender`, 
-			`headimg_url`, 
+			`code`, 
+			`name`, 
+			`desc`, 
+			`image`, 
+			`price`, 
+			`model`, 
+			`out_url`, 
 			`belong`
 		)
 		values
@@ -74,45 +73,47 @@
 			#{modifier}, 
 			#{creator}, 
 			#{modifyTime}, 
+			#{remark}, 
 			#{status}, 
-			#{username}, 
-			#{password}, 
-			#{phoneNumber}, 
-			#{email}, 
-			#{nickname}, 
-			#{gender}, 
-			#{headimgUrl}, 
+			#{code}, 
+			#{name}, 
+			#{desc}, 
+			#{image}, 
+			#{price}, 
+			#{model}, 
+			#{outUrl}, 
 			#{belong}
 		)
 	</insert>
 
-    <update id="update" parameterType="net.rokyinfo.insurance.entity.UserEntity">
-        update u_user
+    <update id="update" parameterType="net.rokyinfo.insurance.entity.ProductEntity">
+        update ins_product
         <set>
             <if test="version != null">`version` = #{version},</if>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="modifier != null">`modifier` = #{modifier},</if>
             <if test="creator != null">`creator` = #{creator},</if>
             <if test="modifyTime != null">`modify_time` = #{modifyTime},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
             <if test="status != null">`status` = #{status},</if>
-            <if test="username != null">`username` = #{username},</if>
-            <if test="password != null">`password` = #{password},</if>
-            <if test="phoneNumber != null">`phone_number` = #{phoneNumber},</if>
-            <if test="email != null">`email` = #{email},</if>
-            <if test="nickname != null">`nickname` = #{nickname},</if>
-            <if test="gender != null">`gender` = #{gender},</if>
-            <if test="headimgUrl != null">`headimg_url` = #{headimgUrl},</if>
+            <if test="code != null">`code` = #{code},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="desc != null">`desc` = #{desc},</if>
+            <if test="image != null">`image` = #{image},</if>
+            <if test="price != null">`price` = #{price},</if>
+            <if test="model != null">`model` = #{model},</if>
+            <if test="outUrl != null">`out_url` = #{outUrl},</if>
             <if test="belong != null">`belong` = #{belong}</if>
         </set>
         where id = #{id}
     </update>
 
     <delete id="delete">
-		delete from u_user where id = #{value}
+		delete from ins_product where id = #{value}
 	</delete>
 
     <delete id="deleteBatch">
-        delete from u_user where id in
+        delete from ins_product where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

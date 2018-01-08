@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Created by yuanzhijian on 2017/5/19.
  */
 @ResponseStatus(HttpStatus.FORBIDDEN)
-public class RkForbiddenException extends RKException{
+public class RkForbiddenException extends RkException {
     public RkForbiddenException(String msg, int code) {
         super(msg, code);
     }
