@@ -81,6 +81,8 @@ public class OrderEntity implements Serializable {
     //到期时间
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expirationTime;
+    //骑多多系统用户ID
+    private String userId;
 
     /**
      * 获取：主键
@@ -500,5 +502,13 @@ public class OrderEntity implements Serializable {
      */
     public void setExpirationTime(Date expirationTime) {
         this.expirationTime = expirationTime;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

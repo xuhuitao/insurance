@@ -35,6 +35,7 @@
         <result property="payment" column="payment"/>
         <result property="activationTime" column="activation_time"/>
         <result property="expirationTime" column="expiration_time"/>
+        <result property="userId" column="userId"/>
     </resultMap>
 
     <select id="queryObject" resultType="net.rokyinfo.insurance.entity.OrderEntity">
@@ -43,6 +44,9 @@
 
     <select id="queryList" resultType="net.rokyinfo.insurance.entity.OrderEntity">
         select * from ins_order
+        <where>
+            <if test="status != null">`status` = #{status}</if>
+        </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -57,7 +61,10 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from ins_order 
+		select count(*) from ins_order
+        <where>
+            <if test="status != null">`status` = #{status}</if>
+        </where>
 	</select>
 
     <insert id="save" parameterType="net.rokyinfo.insurance.entity.OrderEntity" useGeneratedKeys="true"
