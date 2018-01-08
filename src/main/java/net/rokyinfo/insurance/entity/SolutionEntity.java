@@ -3,22 +3,20 @@ package net.rokyinfo.insurance.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
-
 /**
- * 用户表
+ * 保险产品方案表
  *
- * @author zhijian.yuan
- * @email zhijian.yuan@gmail.com
- * @date 2018-01-05 13:18:54
+ * @author yangyang.cao
+ * @email yangyang.cao@gmail.com
+ * @date 2018-01-08 10:31:21
  */
-public class UserEntity implements Serializable {
+public class SolutionEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键
-     */
+    //主键
     private Long id;
     //版本号
     private Integer version;
@@ -32,24 +30,24 @@ public class UserEntity implements Serializable {
     //最后修改时间
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
-    //状态
+    //备注
+    private String remark;
+    //状态 ENABLE 可用 DISABLE 不可用
     private String status;
-    //用户名
-    private String username;
-    //密码
-    private String password;
-    //手机号码
-    private String phoneNumber;
-    //邮箱
-    private String email;
-    //昵称
-    private String nickname;
-    //性别
-    private Integer gender;
-    //头像
-    private String headimgUrl;
-    //所属保险公司ID
-    private Long belong;
+    //保险产品ID
+    private Long productId;
+    //方案编号
+    private String code;
+    //方案名称
+    private String name;
+    //方案描述
+    private String desc;
+    //方案图片
+    private String image;
+    //单价
+    private BigDecimal price;
+    //有效期：单位月
+    private Integer indate;
 
     /**
      * 获取：主键
@@ -136,128 +134,128 @@ public class UserEntity implements Serializable {
     }
 
     /**
-     * 获取：状态
+     * 获取：备注
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * 设置：备注
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * 获取：状态 ENABLE 可用 DISABLE 不可用
      */
     public String getStatus() {
         return status;
     }
 
     /**
-     * 设置：状态
+     * 设置：状态 ENABLE 可用 DISABLE 不可用
      */
     public void setStatus(String status) {
         this.status = status;
     }
 
     /**
-     * 获取：用户名
+     * 获取：保险产品ID
      */
-    public String getUsername() {
-        return username;
+    public Long getProductId() {
+        return productId;
     }
 
     /**
-     * 设置：用户名
+     * 设置：保险产品ID
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     /**
-     * 获取：密码
+     * 获取：方案编号
      */
-    public String getPassword() {
-        return password;
+    public String getCode() {
+        return code;
     }
 
     /**
-     * 设置：密码
+     * 设置：方案编号
      */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     /**
-     * 获取：手机号码
+     * 获取：方案名称
      */
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getName() {
+        return name;
     }
 
     /**
-     * 设置：手机号码
+     * 设置：方案名称
      */
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * 获取：邮箱
+     * 获取：方案描述
      */
-    public String getEmail() {
-        return email;
+    public String getDesc() {
+        return desc;
     }
 
     /**
-     * 设置：邮箱
+     * 设置：方案描述
      */
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     /**
-     * 获取：昵称
+     * 获取：方案图片
      */
-    public String getNickname() {
-        return nickname;
+    public String getImage() {
+        return image;
     }
 
     /**
-     * 设置：昵称
+     * 设置：方案图片
      */
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     /**
-     * 获取：性别
+     * 获取：单价
      */
-    public Integer getGender() {
-        return gender;
+    public BigDecimal getPrice() {
+        return price;
     }
 
     /**
-     * 设置：性别
+     * 设置：单价
      */
-    public void setGender(Integer gender) {
-        this.gender = gender;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     /**
-     * 获取：头像
+     * 获取：有效期：单位月
      */
-    public String getHeadimgUrl() {
-        return headimgUrl;
+    public Integer getIndate() {
+        return indate;
     }
 
     /**
-     * 设置：头像
+     * 设置：有效期：单位月
      */
-    public void setHeadimgUrl(String headimgUrl) {
-        this.headimgUrl = headimgUrl;
-    }
-
-    /**
-     * 获取：所属保险公司ID
-     */
-    public Long getBelong() {
-        return belong;
-    }
-
-    /**
-     * 设置：所属保险公司ID
-     */
-    public void setBelong(Long belong) {
-        this.belong = belong;
+    public void setIndate(Integer indate) {
+        this.indate = indate;
     }
 }

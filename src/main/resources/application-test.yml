@@ -1,10 +1,3 @@
-# Tomcat
-server:
-    tomcat:
-        max-threads: 1000
-        min-spare-threads: 30
-    port: 8081
-
 spring:
     # mysql
     datasource:
@@ -12,15 +5,3 @@ spring:
         username: root
         password: WWW.RokyInfo.Com
         driverClassName: com.mysql.jdbc.Driver
-        # jackson时间格式化
-    jackson:
-        time-zone: GMT+8
-        date-format: yyyy-MM-dd HH:mm:ss
-
-# Mybatis配置
-mybatis:
-    mapperLocations: classpath:mapper/*.xml
-    configLocation: classpath:mybatis.xml
-
-
-

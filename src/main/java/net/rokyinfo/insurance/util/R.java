@@ -1,63 +1,42 @@
 package net.rokyinfo.insurance.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 返回数据
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2016年10月27日 下午9:59:27
  */
-public class R extends HashMap<String, Object> {
-	private static final long serialVersionUID = 1L;
-	
-	public R() {
-		put("code", 0);
-	}
-	
-	public static R error() {
-		return error(500, "未知异常，请联系管理员");
-	}
-	
-	public static R error(String msg) {
-		return error(500, msg);
-	}
-	
-	public static R error(int code, String msg) {
-		R r = new R();
-		r.put("code", code);
-		r.put("msg", msg);
-		return r;
-	}
+@Data
+public class R<T> implements Serializable {
 
-	public static R error(int code, String msg,String reqPath) {
-		R r = new R();
-		r.put("code", code);
-		r.put("msg", msg);
-		r.put("path", reqPath);
-		return r;
-	}
+    public static final int SUCCESS = 0;
+    public static final int FAIL = 1;
+    public static final int NO_PERMISSION = 2;
+    private static final long serialVersionUID = 1L;
+    private String msg = "success";
 
-	public static R ok(String msg) {
-		R r = new R();
-		r.put("msg", msg);
-		return r;
-	}
-	
-	public static R ok(Map<String, Object> map) {
-		R r = new R();
-		r.putAll(map);
-		return r;
-	}
-	
-	public static R ok() {
-		return new R();
-	}
+    private int code = SUCCESS;
 
-	public R put(String key, Object value) {
-		super.put(key, value);
-		return this;
-	}
+    private T data;
+
+    public R() {
+        super();
+    }
+
+    public R(T data) {
+        super();
+        this.data = data;
+    }
+
+    public R(Throwable e) {
+        super();
+        this.msg = e.getLocalizedMessage();
+        this.code = FAIL;
+    }
+
 }

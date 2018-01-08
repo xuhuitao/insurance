@@ -2,6 +2,7 @@ package net.rokyinfo.insurance.util;
 
 /**
  * 系统参数相关Key
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2017-03-26 10:33

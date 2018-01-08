@@ -3,15 +3,12 @@ package net.rokyinfo.insurance.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import net.rokyinfo.insurance.entity.UserEntity;
-import net.rokyinfo.insurance.service.UserService;
+import net.rokyinfo.insurance.entity.ProductEntity;
+import net.rokyinfo.insurance.service.ProductService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -19,22 +16,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户表
+ * 保险产品表
  *
- * @author zhijian.yuan
- * @email zhijian.yuan@gmail.com
- * @date 2018-01-05 13:18:54
+ * @author yangyang.cao
+ * @email yangyang.cao@gmail.com
+ * @date 2018-01-08 10:31:21
  */
 @RestController
-@RequestMapping("/v1.0/users")
-public class UserController {
+@RequestMapping("/v1.0/products")
+public class ProductController {
     @Autowired
-    private UserService userService;
+    private ProductService productService;
 
     /**
      * 列表
      */
-    @ApiOperation(value = "列表", notes = "")
+    @ApiOperation(value = "保险产品列表", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "params", value = "", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "page", value = "分页第几页示例：1", required = false, dataType = "String", paramType = "query"),
@@ -47,10 +44,10 @@ public class UserController {
         //查询列表数据
         Query query = new Query(params);
 
-        List<UserEntity> userList = userService.queryList(query);
-        int total = userService.queryTotal(query);
+        List<ProductEntity> insProductList = productService.queryList(query);
+        int total = productService.queryTotal(query);
 
-        PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
+        PageUtils pageUtil = new PageUtils(insProductList, total, query.getLimit(), query.getPage());
 
         return new R<>(pageUtil);
     }
@@ -64,32 +61,19 @@ public class UserController {
     @ApiImplicitParam(name = "id", value = "", required = true, dataType = "Integer", paramType = "path")
     @GetMapping("/{id}")
     public R info(@PathVariable("id") Long id) {
-        UserEntity user = userService.queryObject(id);
+        ProductEntity insProduct = productService.queryObject(id);
 
-        return new R<>(user);
+        return new R<>(insProduct);
     }
 
     /**
-     * 当前登录用户详细
-     */
-    @GetMapping("/detail")
-    public R detail() {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
-
-        return new R<>(user);
-    }
-
-    /**
-     * 保存
+     * 新增
      */
     @ApiOperation(value = "新增", notes = "")
-    @ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
+    @ApiImplicitParam(name = "insProduct", value = "", required = true, dataType = "ProductEntity")
     @PostMapping("/")
-    public R save(@RequestBody UserEntity user) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword().trim()));
-        userService.save(user);
+    public R save(@RequestBody ProductEntity insProduct) {
+        productService.save(insProduct);
 
         return new R<>();
     }
@@ -98,10 +82,10 @@ public class UserController {
      * 修改
      */
     @ApiOperation(value = "修改", notes = "")
-    @ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
+    @ApiImplicitParam(name = "insProduct", value = "", required = true, dataType = "ProductEntity")
     @PutMapping("/")
-    public R update(@RequestBody UserEntity user) {
-        userService.update(user);
+    public R update(@RequestBody ProductEntity insProduct) {
+        productService.update(insProduct);
 
         return new R<>();
     }
@@ -113,7 +97,7 @@ public class UserController {
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
     @DeleteMapping("/")
     public R delete(@RequestBody Long[] ids) {
-        userService.deleteBatch(ids);
+        productService.deleteBatch(ids);
 
         return new R<>();
     }
