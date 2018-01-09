@@ -27,8 +27,6 @@
         <result property="scooterImg" column="scooter_img"/>
         <result property="ccuSn" column="ccu_sn"/>
         <result property="belong" column="belong"/>
-        <result property="productId" column="product_id"/>
-        <result property="solutionId" column="solution_id"/>
         <result property="price" column="price"/>
         <result property="orderNo" column="order_no"/>
         <result property="trxNo" column="trx_no"/>
@@ -36,13 +34,21 @@
         <result property="activationTime" column="activation_time"/>
         <result property="expirationTime" column="expiration_time"/>
         <result property="userId" column="userId"/>
+
+        <association property="solutionEntity" column="solution_id"
+                     javaType="net.rokyinfo.insurance.entity.SolutionEntity" select="net.rokyinfo.insurance.dao.SolutionDao.queryObject">
+        </association>
+
+        <association property="insuranceProductEntity" column="product_id"
+                     javaType="net.rokyinfo.insurance.entity.ProductEntity" select="net.rokyinfo.insurance.dao.ProductDao.queryObject">
+        </association>
     </resultMap>
 
     <select id="queryObject" resultType="net.rokyinfo.insurance.entity.OrderEntity">
 		select * from ins_order where id = #{value}
 	</select>
 
-    <select id="queryList" resultType="net.rokyinfo.insurance.entity.OrderEntity">
+    <select id="queryList" resultMap="insOrderMap">
         select * from ins_order
         <where>
             <if test="status != null">`status` = #{status}</if>

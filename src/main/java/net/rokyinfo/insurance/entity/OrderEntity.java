@@ -63,10 +63,10 @@ public class OrderEntity implements Serializable {
     private String ccuSn;
     //所属保险公司ID
     private Long belong;
-    //产品ID
-    private Long productId;
-    //产品方案ID
-    private Long solutionId;
+    //产品
+    private ProductEntity insuranceProductEntity;
+    //产品方案
+    private SolutionEntity solutionEntity;
     //订单价格
     private BigDecimal price;
     //订单流水号
@@ -392,32 +392,20 @@ public class OrderEntity implements Serializable {
         this.belong = belong;
     }
 
-    /**
-     * 获取：产品ID
-     */
-    public Long getProductId() {
-        return productId;
+    public ProductEntity getInsuranceProductEntity() {
+        return insuranceProductEntity;
     }
 
-    /**
-     * 设置：产品ID
-     */
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setInsuranceProductEntity(ProductEntity insuranceProductEntity) {
+        this.insuranceProductEntity = insuranceProductEntity;
     }
 
-    /**
-     * 获取：产品方案ID
-     */
-    public Long getSolutionId() {
-        return solutionId;
+    public SolutionEntity getSolutionEntity() {
+        return solutionEntity;
     }
 
-    /**
-     * 设置：产品方案ID
-     */
-    public void setSolutionId(Long solutionId) {
-        this.solutionId = solutionId;
+    public void setSolutionEntity(SolutionEntity solutionEntity) {
+        this.solutionEntity = solutionEntity;
     }
 
     /**
