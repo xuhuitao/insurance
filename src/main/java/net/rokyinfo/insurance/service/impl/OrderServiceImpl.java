@@ -1,6 +1,6 @@
 package net.rokyinfo.insurance.service.impl;
 
-import enums.OrderStatus;
+import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.dao.OrderDao;
 import net.rokyinfo.insurance.dao.SolutionDao;
 import net.rokyinfo.insurance.entity.OrderEntity;

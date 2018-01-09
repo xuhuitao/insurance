@@ -1,4 +1,4 @@
-package enums;
+package net.rokyinfo.insurance.enums;
 
 public enum OrderStatus {
 
