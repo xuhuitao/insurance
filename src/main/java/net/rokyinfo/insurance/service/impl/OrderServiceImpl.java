@@ -1,12 +1,15 @@
 package net.rokyinfo.insurance.service.impl;
 
+import net.rokyinfo.insurance.entity.ChargeProductEntity;
 import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.dao.OrderDao;
 import net.rokyinfo.insurance.dao.SolutionDao;
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.SolutionEntity;
 import net.rokyinfo.insurance.exception.RkInvalidRequestException;
+import net.rokyinfo.insurance.retrofit.CreatePayOrderWrapper;
 import net.rokyinfo.insurance.service.OrderService;
+import net.rokyinfo.insurance.util.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private SolutionDao solutionDao;
 
+    @Autowired
+    private CreatePayOrderWrapper createPayOrderWrapper;
+
     @Override
     public OrderEntity queryObject(Long id) {
         return orderDao.queryObject(id);
@@ -58,7 +64,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(OrderEntity insOrder, MultipartFile billFile, MultipartFile scooterFiles) {
+    public R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile scooterFiles) {
+
+        SolutionEntity solutionEntity = solutionDao.queryObject(insOrder.getSolutionId());
+        insOrder.setPrice(solutionEntity.getPrice());
+
+        ChargeProductEntity chargeProductEntity = new ChargeProductEntity();
+
+        //TODO 异常处理
+        String payOrder = "";
+        try {
+            payOrder = createPayOrderWrapper.createPayOrder(insOrder.getUserId(), 1L, "APP",
+                    insOrder.getPrice().doubleValue(), insOrder.getOrderNo(), chargeProductEntity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String billFileLink = storeFile(billFile);
         insOrder.setBillImg(billFileLink);
@@ -70,16 +90,10 @@ public class OrderServiceImpl implements OrderService {
         insOrder.setVersion(0);
         insOrder.setBelong(0L);
         insOrder.setStatus(OrderStatus.TO_PAY.getOrderStatusValue());
-
         insOrder.setCreateTime(curTime);
-        insOrder.setOrderNo(UUID.randomUUID().toString());
-
-        SolutionEntity solutionEntity = solutionDao.queryObject(insOrder.getSolutionId());
-        if (solutionEntity != null) {
-            insOrder.setPrice(solutionEntity.getPrice());
-        }
-
         orderDao.save(insOrder);
+
+        return new R<>(payOrder);
 
     }
 

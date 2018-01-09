@@ -1,10 +1,10 @@
 package net.rokyinfo.insurance.service;
 
 import net.rokyinfo.insurance.entity.OrderEntity;
+import net.rokyinfo.insurance.util.R;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
-
 /**
  * 保险订单表
  *
@@ -22,7 +22,7 @@ public interface OrderService {
 
     void save(OrderEntity insOrder);
 
-    void save(OrderEntity insOrder, MultipartFile billFile, MultipartFile scooterFiles);
+    R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile scooterFiles);
 
     void update(OrderEntity insOrder);
 

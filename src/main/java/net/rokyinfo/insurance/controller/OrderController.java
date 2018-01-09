@@ -76,9 +76,8 @@ public class OrderController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public R save(@Valid @ModelAttribute OrderEntity insOrder) {
 
-        orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
+        return orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
 
-        return new R<>();
     }
 
     /**
