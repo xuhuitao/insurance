@@ -13,6 +13,7 @@
         <result property="modifyTime" column="modify_time"/>
         <result property="status" column="status"/>
         <result property="applicant" column="applicant"/>
+        <result property="phoneNumber" column="phone_number"/>
         <result property="idType" column="id_type"/>
         <result property="idNumber" column="id_number"/>
         <result property="province" column="province"/>
@@ -83,7 +84,8 @@
 			`modifier`, 
 			`modify_time`, 
 			`status`, 
-			`applicant`, 
+			`applicant`,
+			`phone_number`,
 			`id_type`, 
 			`id_number`, 
 			`province`, 
@@ -115,7 +117,8 @@
 			#{modifier}, 
 			#{modifyTime}, 
 			#{status}, 
-			#{applicant}, 
+			#{applicant},
+			#{phoneNumber},
 			#{idType}, 
 			#{idNumber}, 
 			#{province}, 
