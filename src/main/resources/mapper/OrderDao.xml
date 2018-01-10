@@ -113,7 +113,8 @@
 			`trx_no`, 
 			`payment`, 
 			`activation_time`, 
-			`expiration_time`
+			`expiration_time`,
+			`userId`
 		)
 		values
 		(
@@ -146,7 +147,8 @@
 			#{trxNo}, 
 			#{payment}, 
 			#{activationTime}, 
-			#{expirationTime}
+			#{expirationTime},
+			#{userId}
 		)
 	</insert>
 
