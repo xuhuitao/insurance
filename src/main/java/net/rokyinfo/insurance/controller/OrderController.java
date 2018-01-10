@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.rokyinfo.insurance.entity.OrderEntity;
+import net.rokyinfo.insurance.json.JSON;
 import net.rokyinfo.insurance.service.OrderService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
@@ -15,7 +16,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 /**
  * 保险订单表
  *
@@ -43,6 +43,7 @@ public class OrderController {
             @ApiImplicitParam(name = "order", value = "排序顺序：desc", required = false, dataType = "String", paramType = "query")}
     )
     @GetMapping("")
+    @JSON(type = OrderEntity.class, filter = "billFile,scooterFiles")
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
