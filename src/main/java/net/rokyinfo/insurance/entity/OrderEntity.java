@@ -110,6 +110,7 @@ public class OrderEntity implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expirationTime;
     //骑多多系统用户ID
+    @NotNull(message = "用户ID不能为空")
     private String userId;
     //上传的发票图片
     private MultipartFile billFile;
