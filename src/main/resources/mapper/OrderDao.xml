@@ -13,6 +13,7 @@
         <result property="modifyTime" column="modify_time"/>
         <result property="status" column="status"/>
         <result property="applicant" column="applicant"/>
+        <result property="phoneNumber" column="phone_number"/>
         <result property="idType" column="id_type"/>
         <result property="idNumber" column="id_number"/>
         <result property="province" column="province"/>
@@ -27,22 +28,32 @@
         <result property="scooterImg" column="scooter_img"/>
         <result property="ccuSn" column="ccu_sn"/>
         <result property="belong" column="belong"/>
-        <result property="productId" column="product_id"/>
-        <result property="solutionId" column="solution_id"/>
         <result property="price" column="price"/>
         <result property="orderNo" column="order_no"/>
         <result property="trxNo" column="trx_no"/>
         <result property="payment" column="payment"/>
         <result property="activationTime" column="activation_time"/>
         <result property="expirationTime" column="expiration_time"/>
+        <result property="userId" column="userId"/>
+
+        <association property="solutionEntity" column="solution_id"
+                     javaType="net.rokyinfo.insurance.entity.SolutionEntity" select="net.rokyinfo.insurance.dao.SolutionDao.queryObject">
+        </association>
+
+        <association property="insuranceProductEntity" column="product_id"
+                     javaType="net.rokyinfo.insurance.entity.ProductEntity" select="net.rokyinfo.insurance.dao.ProductDao.queryObject">
+        </association>
     </resultMap>
 
     <select id="queryObject" resultType="net.rokyinfo.insurance.entity.OrderEntity">
 		select * from ins_order where id = #{value}
 	</select>
 
-    <select id="queryList" resultType="net.rokyinfo.insurance.entity.OrderEntity">
+    <select id="queryList" resultMap="insOrderMap">
         select * from ins_order
+        <where>
+            <if test="status != null">`status` = #{status}</if>
+        </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -57,7 +68,10 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from ins_order 
+		select count(*) from ins_order
+        <where>
+            <if test="status != null">`status` = #{status}</if>
+        </where>
 	</select>
 
     <insert id="save" parameterType="net.rokyinfo.insurance.entity.OrderEntity" useGeneratedKeys="true"
@@ -70,7 +84,8 @@
 			`modifier`, 
 			`modify_time`, 
 			`status`, 
-			`applicant`, 
+			`applicant`,
+			`phone_number`,
 			`id_type`, 
 			`id_number`, 
 			`province`, 
@@ -102,7 +117,8 @@
 			#{modifier}, 
 			#{modifyTime}, 
 			#{status}, 
-			#{applicant}, 
+			#{applicant},
+			#{phoneNumber},
 			#{idType}, 
 			#{idNumber}, 
 			#{province}, 

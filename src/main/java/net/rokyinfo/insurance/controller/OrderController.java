@@ -11,7 +11,7 @@ import net.rokyinfo.insurance.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +35,7 @@ public class OrderController {
     @ApiOperation(value = "保险订单列表", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "params", value = "", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "订单状态", required = false, dataType = "Integer", paramType = "query"),
             @ApiImplicitParam(name = "page", value = "分页第几页示例：1", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "limit", value = "分页每页总数示例：20", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "sidx", value = "排序字段：id", required = false, dataType = "String", paramType = "query"),
@@ -72,11 +73,11 @@ public class OrderController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
-    @PostMapping("/")
-    public R save(@RequestBody OrderEntity insOrder) {
-        orderService.save(insOrder);
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public R save(@Valid @ModelAttribute OrderEntity insOrder) {
 
-        return new R<>();
+        return orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
+
     }
 
     /**

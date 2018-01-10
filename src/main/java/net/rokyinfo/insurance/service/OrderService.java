@@ -1,10 +1,10 @@
 package net.rokyinfo.insurance.service;
 
 import net.rokyinfo.insurance.entity.OrderEntity;
-
+import net.rokyinfo.insurance.util.R;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
-
 /**
  * 保险订单表
  *
@@ -21,6 +21,8 @@ public interface OrderService {
     int queryTotal(Map<String, Object> map);
 
     void save(OrderEntity insOrder);
+
+    R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile scooterFiles);
 
     void update(OrderEntity insOrder);
 
