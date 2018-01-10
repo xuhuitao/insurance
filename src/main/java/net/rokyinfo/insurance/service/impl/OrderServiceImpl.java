@@ -1,11 +1,11 @@
 package net.rokyinfo.insurance.service.impl;
 
-import net.rokyinfo.insurance.entity.ChargeProductEntity;
-import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.dao.OrderDao;
 import net.rokyinfo.insurance.dao.SolutionDao;
+import net.rokyinfo.insurance.entity.ChargeProductEntity;
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.SolutionEntity;
+import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.exception.RkInvalidRequestException;
 import net.rokyinfo.insurance.retrofit.CreatePayOrderWrapper;
 import net.rokyinfo.insurance.service.OrderService;
@@ -18,9 +18,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Service("insOrderService")
 public class OrderServiceImpl implements OrderService {
@@ -74,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
         //TODO 异常处理
         String payOrder = "";
         try {
-            payOrder = createPayOrderWrapper.createPayOrder(insOrder.getUserId(), 1L, "APP",
+            payOrder = createPayOrderWrapper.createPayOrder(insOrder.getUserId(), 2L, "APP",
                     insOrder.getPrice().doubleValue(), insOrder.getOrderNo(), chargeProductEntity);
         } catch (IOException e) {
             e.printStackTrace();

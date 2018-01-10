@@ -42,17 +42,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (RkAuthorizationException e) {
-
-            R errorResponse = new R(e);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            String json = JacksonUtil.toJSon(errorResponse);
-            System.out.println(json);
-            if (!StringUtils.isEmpty(json)) {
-                response.getWriter().write(json);
-            }
-            return;
+            SecurityContextHolder.getContext().setAuthentication(null);
         }
         chain.doFilter(request, response);
 

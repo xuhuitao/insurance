@@ -38,8 +38,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 // 对请求进行认证
                 .authorizeRequests()
-                // 注册接口放行
-                .antMatchers(HttpMethod.POST, "/users/save").permitAll()
+                // 所有 / 的所有请求 都放行
+                .antMatchers("/").permitAll()
+                // 对产品列表放行
+                .antMatchers(HttpMethod.GET,"/v1.0/products").permitAll()
+                // 对解决方案列表放行
+                .antMatchers(HttpMethod.GET,"/v1.0/solutions").permitAll()
+                // 对订单列表放行
+                .antMatchers(HttpMethod.GET,"/v1.0/orders").permitAll()
+                // 对注册接口放行
+                .antMatchers(HttpMethod.POST, "/v1.0/users/save").permitAll()
                 // 所有请求需要身份认证
                 .anyRequest().authenticated()
                 .and()

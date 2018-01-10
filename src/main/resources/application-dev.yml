@@ -5,3 +5,22 @@ spring:
         username: root
         password: caoyy
         driverClassName: com.mysql.jdbc.Driver
+
+    #AMQP
+    rabbitmq:
+        host: 192.168.102.17
+        port: 5672
+        username: guest
+        password: guest
+
+business:
+    insurance:
+      image:
+        storage:
+          address: /Users/caoyangyang/insurance-pic/
+        request:
+          url:
+            prefix: http://localhost/insurance/res/
+
+remote:
+    url: http://192.168.102.17:19606
