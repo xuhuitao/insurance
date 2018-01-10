@@ -24,7 +24,6 @@
         <result property="vin" column="vin"/>
         <result property="buyTime" column="buy_time"/>
         <result property="buyPrice" column="buy_price"/>
-        <result property="billImg" column="bill_img"/>
         <result property="ccuSn" column="ccu_sn"/>
         <result property="belong" column="belong"/>
         <result property="price" column="price"/>
@@ -34,6 +33,9 @@
         <result property="activationTime" column="activation_time"/>
         <result property="expirationTime" column="expiration_time"/>
         <result property="userId" column="userId"/>
+
+        <result property="billImg" column="bill_img" javaType="java.lang.String" jdbcType="VARCHAR"
+                typeHandler="net.rokyinfo.insurance.config.UrlTypeHandler"/>
 
         <result property="scooterImg" column="scooter_img" javaType="java.util.List" jdbcType="VARCHAR"
                 typeHandler="net.rokyinfo.insurance.config.ListTypeHandler"/>
