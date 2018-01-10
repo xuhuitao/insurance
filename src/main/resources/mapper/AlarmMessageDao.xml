@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.rokyinfo.insurance.dao.AlarmMessageDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="net.rokyinfo.insurance.entity.AlarmMessageEntity" id="alarmMessageMap">
+        <result property="id" column="id"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifier" column="modifier"/>
+        <result property="creator" column="creator"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="ccuSn" column="ccu_sn"/>
+        <result property="alarmType" column="alarm_type"/>
+        <result property="content" column="content"/>
+        <result property="alarmTime" column="alarm_time"/>
+        <result property="belong" column="belong"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="net.rokyinfo.insurance.entity.AlarmMessageEntity">
+		select * from ue_alarm_message where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="net.rokyinfo.insurance.entity.AlarmMessageEntity">
+		select * from ue_alarm_message
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from ue_alarm_message 
+	</select>
+	 
+	<insert id="save" parameterType="net.rokyinfo.insurance.entity.AlarmMessageEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into ue_alarm_message
+		(
+			`version`, 
+			`create_time`, 
+			`modifier`, 
+			`creator`, 
+			`modify_time`, 
+			`ccu_sn`, 
+			`alarm_type`, 
+			`content`, 
+			`alarm_time`, 
+			`belong`
+		)
+		values
+		(
+			#{version}, 
+			#{createTime}, 
+			#{modifier}, 
+			#{creator}, 
+			#{modifyTime}, 
+			#{ccuSn}, 
+			#{alarmType}, 
+			#{content}, 
+			#{alarmTime}, 
+			#{belong}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="net.rokyinfo.insurance.entity.AlarmMessageEntity">
+		update ue_alarm_message 
+		<set>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="ccuSn != null">`ccu_sn` = #{ccuSn}, </if>
+			<if test="alarmType != null">`alarm_type` = #{alarmType}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="alarmTime != null">`alarm_time` = #{alarmTime}, </if>
+			<if test="belong != null">`belong` = #{belong}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from ue_alarm_message where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from ue_alarm_message where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
