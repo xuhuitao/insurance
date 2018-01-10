@@ -16,7 +16,7 @@ public class RemoteService {
 
     public String createPayOrder(String userId, Long payChannelId, String payType, double amount, String orderId, ChargeProductEntity productEntity) throws IOException {
         Call<ResponseBody> createPayOrderCall = retrofitWrapper.getRemoteApi().createPayOrder(userId, payChannelId,
-                payType, amount, orderId, productEntity);
+                payType, amount, orderId, "88880000000000000002", productEntity);
         Response<ResponseBody> createPayOrderResp = createPayOrderCall.execute();
         if (createPayOrderResp.isSuccessful()) {
             return createPayOrderResp.body().string();
