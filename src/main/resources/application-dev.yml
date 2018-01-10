@@ -13,11 +13,13 @@ spring:
         username: guest
         password: guest
 
-business:
-    insurance:
+insurance:
+    res:
       image:
         storage:
-          address: /Users/caoyangyang/insurance-pic/
+          path:
+            bill: /insurance-res/pic/bill
+            scooter: /insurance-res/pic/scooter
         request:
           url:
             prefix: http://localhost/insurance/res/

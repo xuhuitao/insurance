@@ -11,8 +11,8 @@ import net.rokyinfo.insurance.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +75,7 @@ public class OrderController {
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public R save(@Valid @ModelAttribute OrderEntity insOrder) {
+    public R save(@Valid @ModelAttribute OrderEntity insOrder) throws IOException {
 
         return orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
 

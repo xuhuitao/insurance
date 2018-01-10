@@ -13,14 +13,16 @@ spring:
         username: guest
         password: guest
 
-business:
-    insurance:
+insurance:
+    res:
       image:
         storage:
-          address: /home/rkAdmin/nfs-data/images/insurance/
+          path:
+            bill: /insurance-res/pic/bill
+            scooter: /insurance-res/pic/scooter
         request:
           url:
-            prefix: http://cjl3.rokyinfo.net:7190/api-user/res/insurance/
+            prefix: http://localhost/insurance/res/
 
 remote:
     url: http://192.168.102.17:19606

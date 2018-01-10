@@ -4,6 +4,7 @@ import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.util.R;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 /**
@@ -23,7 +24,7 @@ public interface OrderService {
 
     void save(OrderEntity insOrder);
 
-    R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile scooterFiles);
+    R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException;
 
     void update(OrderEntity insOrder);
 

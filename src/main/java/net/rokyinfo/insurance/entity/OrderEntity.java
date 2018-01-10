@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 保险订单表
@@ -78,7 +79,7 @@ public class OrderEntity implements Serializable {
     //发票图片
     private String billImg;
     //车辆图片
-    private String scooterImg;
+    private List<String> scooterImg;
     //中控SN号
     @NotNull(message = "中控SN号不能为空")
     private String ccuSn;
@@ -113,7 +114,7 @@ public class OrderEntity implements Serializable {
     //上传的发票图片
     private MultipartFile billFile;
     //上传的车辆图片
-    private MultipartFile scooterFiles;
+    private MultipartFile[] scooterFiles;
 
     /**
      * 获取：主键
@@ -392,14 +393,14 @@ public class OrderEntity implements Serializable {
     /**
      * 获取：车辆图片
      */
-    public String getScooterImg() {
+    public List<String> getScooterImg() {
         return scooterImg;
     }
 
     /**
      * 设置：车辆图片
      */
-    public void setScooterImg(String scooterImg) {
+    public void setScooterImg(List<String> scooterImg) {
         this.scooterImg = scooterImg;
     }
 
@@ -563,11 +564,11 @@ public class OrderEntity implements Serializable {
         this.solutionId = solutionId;
     }
 
-    public MultipartFile getScooterFiles() {
+    public MultipartFile[] getScooterFiles() {
         return scooterFiles;
     }
 
-    public void setScooterFiles(MultipartFile scooterFiles) {
+    public void setScooterFiles(MultipartFile[] scooterFiles) {
         this.scooterFiles = scooterFiles;
     }
 }

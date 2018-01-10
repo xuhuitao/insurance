@@ -27,6 +27,7 @@ public class AlarmMsgReceiver {
         if (alarmMsg != null){
             // 存储Message
             logger.info(alarmMsg.toString());
+
         }
 
     }
