@@ -5,3 +5,22 @@ spring:
         username: root
         password: WWW.RokyInfo.Com
         driverClassName: com.mysql.jdbc.Driver
+
+    #AMQP
+    rabbitmq:
+        host: 192.168.102.17
+        port: 5672
+        username: guest
+        password: guest
+
+business:
+    insurance:
+      image:
+        storage:
+          address: /home/rkAdmin/nfs-data/images/insurance/
+        request:
+          url:
+            prefix: http://cjl3.rokyinfo.net:7190/api-user/res/insurance/
+
+remote:
+    url: http://192.168.102.17:19606
