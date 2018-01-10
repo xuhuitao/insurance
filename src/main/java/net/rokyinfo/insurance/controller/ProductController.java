@@ -71,7 +71,7 @@ public class ProductController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insProduct", value = "", required = true, dataType = "ProductEntity")
-    @PostMapping("/")
+    @PostMapping("")
     public R save(@RequestBody ProductEntity insProduct) {
         productService.save(insProduct);
 
@@ -83,7 +83,7 @@ public class ProductController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insProduct", value = "", required = true, dataType = "ProductEntity")
-    @PutMapping("/")
+    @PutMapping("")
     public R update(@RequestBody ProductEntity insProduct) {
         productService.update(insProduct);
 
@@ -95,7 +95,7 @@ public class ProductController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         productService.deleteBatch(ids);
 

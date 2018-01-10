@@ -85,7 +85,7 @@ public class UserController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
-    @PostMapping("/")
+    @PostMapping("")
     public R save(@RequestBody UserEntity user) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword().trim()));
@@ -99,7 +99,7 @@ public class UserController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
-    @PutMapping("/")
+    @PutMapping("")
     public R update(@RequestBody UserEntity user) {
         userService.update(user);
 
@@ -111,7 +111,7 @@ public class UserController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         userService.deleteBatch(ids);
 

@@ -74,7 +74,7 @@ public class OrderController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public R save(@Valid @ModelAttribute OrderEntity insOrder) throws IOException {
 
         return orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
@@ -86,7 +86,7 @@ public class OrderController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
-    @PutMapping("/")
+    @PutMapping("")
     public R update(@RequestBody OrderEntity insOrder) {
         orderService.update(insOrder);
 
@@ -98,7 +98,7 @@ public class OrderController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         orderService.deleteBatch(ids);
 

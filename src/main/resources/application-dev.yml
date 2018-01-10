@@ -18,8 +18,8 @@ insurance:
       image:
         storage:
           path:
-            bill: /insurance-res/pic/bill
-            scooter: /insurance-res/pic/scooter
+            bill: /Users/caoyangyang/caoyy/server_workspace/insurance/insurance-res/pic/bill
+            scooter: /Users/caoyangyang/caoyy/server_workspace/insurance/insurance-res/pic/scooter
         request:
           url:
             prefix: http://localhost/insurance/res/
