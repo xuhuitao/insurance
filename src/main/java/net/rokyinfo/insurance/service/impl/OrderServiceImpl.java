@@ -74,8 +74,8 @@ public class OrderServiceImpl implements OrderService {
         //TODO 异常处理
         String payOrder = "";
         try {
-            payOrder = createPayOrderWrapper.createPayOrder(insOrder.getUserId(), 1L, "APP",
-                    insOrder.getPrice().doubleValue(), insOrder.getOrderNo(), chargeProductEntity);
+            payOrder = createPayOrderWrapper.createPayOrder(insOrder.getUserId(), 2L, "APP",
+                    insOrder.getPrice().doubleValue(), chargeProductEntity);
         } catch (IOException e) {
             e.printStackTrace();
         }
