@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class CreatePayOrderWrapper {
@@ -19,17 +20,21 @@ public class CreatePayOrderWrapper {
     @Autowired
     private RetrofitWrapper retrofitWrapper;
 
-    public String createPayOrder(String userId, Long payChannelId, String payType, double amount, String orderId, ChargeProductEntity productEntity) throws IOException {
+    public String createPayOrder(String userId, Long payChannelId, String payType, double amount, ChargeProductEntity productEntity) throws IOException {
         retryCount++;
-        Call<ResponseBody> createPayOrderCall = retrofitWrapper.getRemoteApi().createPayOrder(userId, payChannelId, payType, amount, orderId, productEntity);
+        Call<ResponseBody> createPayOrderCall = retrofitWrapper.getRemoteApi().createPayOrder(userId, payChannelId, payType, amount, generateOrderNo(), productEntity);
         Response<ResponseBody> createPayOrderResp = createPayOrderCall.execute();
         if (createPayOrderResp.isSuccessful()) {
             return createPayOrderResp.body().string();
         }
         if (retryCount <= RETRY_COUNT) {
-            return createPayOrder(userId, payChannelId, payType, amount, orderId, productEntity);
+            return createPayOrder(userId, payChannelId, payType, amount, productEntity);
         }
-        return "";
+        return null;
+    }
+
+    private String generateOrderNo() {
+        return UUID.randomUUID().toString();
     }
 
 }
