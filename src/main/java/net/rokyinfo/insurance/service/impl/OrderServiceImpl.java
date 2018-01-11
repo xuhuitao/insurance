@@ -2,6 +2,7 @@ package net.rokyinfo.insurance.service.impl;
 
 import net.rokyinfo.insurance.entity.ChargeProductEntity;
 import net.rokyinfo.insurance.entity.ProductEntity;
+import net.rokyinfo.insurance.enums.OrderDispose;
 import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.dao.OrderDao;
 import net.rokyinfo.insurance.entity.OrderEntity;
@@ -60,10 +61,10 @@ public class OrderServiceImpl implements OrderService {
         if (orderEntity.getStatus() != OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue()) {
             throw new RkException("该订单未支付");
         }
-        if (dispose == 0) {
+        if (dispose == OrderDispose.REFUSE.getOrderDisposeValue()) {
             orderEntity.setStatus(OrderStatus.REFUSE_AND_UNREFUND.getOrderStatusValue());
             orderDao.update(orderEntity);
-        } else if (dispose == 1) {
+        } else if (dispose == OrderDispose.PASS.getOrderDisposeValue()) {
             orderEntity.setStatus(OrderStatus.IN_INSURANCE.getOrderStatusValue());
             orderDao.update(orderEntity);
         } else {
