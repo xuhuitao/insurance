@@ -65,6 +65,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderEntity queryOrderByCcuSn(String ccuSn) {
+        return orderDao.queryOrderByCcuSn(ccuSn);
+    }
+
+    @Override
     public List<OrderEntity> queryList(Map<String, Object> map) {
         return orderDao.queryList(map);
     }

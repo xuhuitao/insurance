@@ -1,5 +1,7 @@
 package net.rokyinfo.insurance.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -19,12 +21,14 @@ public class AlarmMessageEntity implements Serializable {
 	//版本号
 	private Integer version;
 	//创建时间
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	//修改者
 	private String modifier;
 	//创建者
 	private String creator;
 	//最后修改时间
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date modifyTime;
 	//设备SN
 	private String ccuSn;
@@ -33,6 +37,7 @@ public class AlarmMessageEntity implements Serializable {
 	//消息内容
 	private String content;
 	//告警时间
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date alarmTime;
 	//所属保险公司ID
 	private Long belong;

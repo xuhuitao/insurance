@@ -3,7 +3,6 @@ package net.rokyinfo.insurance.service;
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.util.R;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,8 @@ public interface OrderService {
     OrderEntity queryObject(Long id);
 
     List<String> queryCcuSnOfOrder(Map<String, Object> map);
+
+    OrderEntity queryOrderByCcuSn(String ccuSn);
 
     List<OrderEntity> queryList(Map<String, Object> map);
 
