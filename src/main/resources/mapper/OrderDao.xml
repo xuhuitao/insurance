@@ -33,9 +33,9 @@
         <result property="activationTime" column="activation_time"/>
         <result property="expirationTime" column="expiration_time"/>
         <result property="userId" column="userId"/>
-        <result property="billImg" column="bill_img"/>
+        <result property="billImg" column="bill_img" typeHandler="net.rokyinfo.insurance.config.UrlTypeHandler"/>
 
-        <result property="scooterImg" column="scooter_img" javaType="java.util.List" jdbcType="VARCHAR"
+        <result property="scooterImg" column="scooter_img"
                 typeHandler="net.rokyinfo.insurance.config.ListTypeHandler"/>
 
         <association property="solutionEntity" column="solution_id"
@@ -47,15 +47,15 @@
         </association>
     </resultMap>
 
-    <select id="queryOrderByOrderNo" resultType="net.rokyinfo.insurance.entity.OrderEntity">
+    <select id="queryOrderByOrderNo" resultMap="insOrderMap">
         select * from ins_order where orderNo = #{orderNo}
     </select>
 
-    <select id="queryOrderByCcuSn" resultType="net.rokyinfo.insurance.entity.OrderEntity">
+    <select id="queryOrderByCcuSn" resultMap="insOrderMap">
 		select * from ins_order where ccu_sn = #{ccuSn}
 	</select>
 
-    <select id="queryObject" resultType="net.rokyinfo.insurance.entity.OrderEntity">
+    <select id="queryObject" resultMap="insOrderMap">
         select * from ins_order where id = #{value}
     </select>
 

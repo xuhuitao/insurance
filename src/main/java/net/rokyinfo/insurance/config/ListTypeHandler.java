@@ -10,6 +10,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @MappedTypes(List.class)
@@ -26,26 +27,29 @@ public class ListTypeHandler extends BaseTypeHandler<List<String>> {
     @Override
     public List<String> getNullableResult(ResultSet resultSet, String s) throws SQLException {
         String str = resultSet.getString(s);
-        if (!TextUtils.isEmpty(str)) {
-            return JacksonUtil.readValue(str, List.class);
-        }
-        return null;
+        return handleField(str);
     }
 
     @Override
     public List<String> getNullableResult(ResultSet resultSet, int i) throws SQLException {
         String str = resultSet.getString(i);
-        if (!TextUtils.isEmpty(str)) {
-            return JacksonUtil.readValue(str, List.class);
-        }
-        return null;
+        return handleField(str);
     }
 
     @Override
     public List<String> getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
         String str = callableStatement.getString(i);
+        return handleField(str);
+    }
+
+    private List<String> handleField(String str) {
         if (!TextUtils.isEmpty(str)) {
-            return JacksonUtil.readValue(str, List.class);
+            List<String> strings = JacksonUtil.readValue(str, List.class);
+            List<String> list = new ArrayList<>();
+            strings.forEach( s -> {
+                list.add(UrlTypeHandler.urlPrefix + s);
+            });
+            return list;
         }
         return null;
     }

@@ -7,5 +7,6 @@
     </settings>
     <typeHandlers>
         <typeHandler handler="net.rokyinfo.insurance.config.ListTypeHandler"/>
+        <!--<typeHandler handler="net.rokyinfo.insurance.config.UrlTypeHandler"/>-->
     </typeHandlers>
 </configuration>
