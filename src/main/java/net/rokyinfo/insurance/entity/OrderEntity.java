@@ -23,10 +23,8 @@ public class OrderEntity implements Serializable {
     //主键
     private Long id;
     //版本号
-    @NotNull(message = "版本号不能为空")
     private Integer version;
     //创建者
-    @NotNull(message = "创建者不能为空")
     private String creator;
     //创建时间
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -37,7 +35,6 @@ public class OrderEntity implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
     //订单状态   0:待支付 ；1：已支付,待审核  2： 已生效，保障中 3：已过期 4：已拒绝，未退款 5：已拒绝，已退款
-    @NotNull(message = "订单状态不能为空")
     private Integer status;
     //投保人姓名
     @NotNull(message = "投保人姓名不能为空")
@@ -84,7 +81,6 @@ public class OrderEntity implements Serializable {
     @NotNull(message = "中控SN号不能为空")
     private String ccuSn;
     //所属保险公司ID
-    @NotNull(message = "所属保险公司ID不能为空")
     private Long belong;
     //产品
     @NotNull(message = "产品ID不能为空")
@@ -95,7 +91,6 @@ public class OrderEntity implements Serializable {
     private Long solutionId;
     private SolutionEntity solutionEntity;
     //订单价格
-    @NotNull(message = "订单价格不能为空")
     private BigDecimal price;
     //订单流水号
     private String orderNo;

@@ -2,13 +2,10 @@ package net.rokyinfo.insurance.service.impl;
 
 import net.rokyinfo.insurance.entity.ChargeProductEntity;
 import net.rokyinfo.insurance.entity.ProductEntity;
-import net.rokyinfo.insurance.enums.OrderDispose;
-import net.rokyinfo.insurance.enums.OrderStatus;
+import net.rokyinfo.insurance.enums.*;
 import net.rokyinfo.insurance.dao.OrderDao;
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.SolutionEntity;
-import net.rokyinfo.insurance.enums.PayChannel;
-import net.rokyinfo.insurance.enums.PayType;
 import net.rokyinfo.insurance.exception.RkException;
 import net.rokyinfo.insurance.exception.RkInvalidRequestException;
 import net.rokyinfo.insurance.retrofit.RemoteService;
@@ -153,6 +150,7 @@ public class OrderServiceImpl implements OrderService {
 
         Date curTime = new Date();
         insOrder.setVersion(0);
+        insOrder.setCreator(CreatorEnum.SYSTEM.getCreator());
         insOrder.setStatus(OrderStatus.TO_PAY.getOrderStatusValue());
         insOrder.setOrderNo(orderNo);
         insOrder.setCreateTime(curTime);
