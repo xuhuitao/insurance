@@ -9,11 +9,17 @@ import net.rokyinfo.insurance.service.OrderService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.jeecgframework.poi.excel.ExcelExportUtil;
+import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
@@ -75,6 +81,22 @@ public class OrderController {
     public R affirm(@PathVariable("id") Long id, @RequestParam Integer dispose) {
         orderService.affirm(id, dispose);
         return new R<>();
+    }
+
+    @GetMapping("/excel")
+    public void exportExcel(@RequestParam(required = false) Integer status, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 告诉浏览器用什么软件可以打开此文件
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        // 下载文件的默认名称
+        response.setHeader("Content-Disposition", "attachment;filename=insurance-order.xls");
+
+        Map<String, Object> params = new HashMap<>();
+        if (status != null) {
+            params.put("status", status);
+        }
+        List<OrderEntity> orderEntityList = orderService.queryList(params);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), OrderEntity.class, orderEntityList);
+        workbook.write(response.getOutputStream());
     }
 
     /**
