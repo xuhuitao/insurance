@@ -58,12 +58,8 @@ public class EbikeController {
         query.put("belong", user.getBelong());
 
         List<String> orderCcuSnList = orderService.queryCcuSnOfOrder(query);
+        List<Ebike> ebikeList = remoteService.getEbikeList(orderCcuSnList);;
         int total = orderService.queryTotal(query);
-
-        List<Ebike> ebikeList = null;
-        if (orderCcuSnList != null && orderCcuSnList.size() > 0) {
-            ebikeList = remoteService.getEbikeList(orderCcuSnList);;
-        }
 
         PageUtils pageUtil = new PageUtils(ebikeList, total, query.getLimit(), query.getPage());
         return new R<>(pageUtil);
