@@ -47,6 +47,10 @@
         </association>
     </resultMap>
 
+    <select id="queryOrderByOrderNo" resultType="net.rokyinfo.insurance.entity.OrderEntity">
+        select * from ins_order where orderNo = #{orderNo}
+    </select>
+
     <select id="queryOrderByCcuSn" resultType="net.rokyinfo.insurance.entity.OrderEntity">
 		select * from ins_order where ccu_sn = #{ccuSn}
 	</select>

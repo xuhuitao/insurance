@@ -28,6 +28,9 @@
 
     <select id="queryList" resultType="net.rokyinfo.insurance.entity.SolutionEntity">
         select * from ins_solution
+        <where>
+            <if test="productId != null">`product_id` = #{productId}</if>
+        </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}

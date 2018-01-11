@@ -21,4 +21,6 @@ public interface OrderDao extends BaseDao<OrderEntity> {
 
     OrderEntity queryOrderByCcuSn(@Param("ccuSn")String ccuSn);
 
+    OrderEntity queryOrderByOrderNo(@Param("orderNo")String orderNo);
+
 }

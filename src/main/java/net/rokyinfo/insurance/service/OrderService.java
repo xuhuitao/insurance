@@ -19,6 +19,8 @@ public interface OrderService {
 
     List<String> queryCcuSnOfOrder(Map<String, Object> map);
 
+    OrderEntity queryOrderByOrderNo(String orderNo);
+
     OrderEntity queryOrderByCcuSn(String ccuSn);
 
     List<OrderEntity> queryList(Map<String, Object> map);
@@ -28,6 +30,8 @@ public interface OrderService {
     void save(OrderEntity insOrder);
 
     R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException;
+
+    void affirm(Long orderId, Integer dispose);
 
     void update(OrderEntity insOrder);
 

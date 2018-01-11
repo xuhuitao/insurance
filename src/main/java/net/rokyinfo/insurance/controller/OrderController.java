@@ -69,6 +69,14 @@ public class OrderController {
         return new R<>(insOrder);
     }
 
+    @ApiOperation(value = "审批", notes = "")
+    @ApiImplicitParam(name = "id", value = "", required = true, dataType = "Integer", paramType = "path")
+    @PutMapping("/{id}")
+    public R affirm(@PathVariable("id") Long id, @RequestParam Integer dispose) {
+        orderService.affirm(id, dispose);
+        return new R<>();
+    }
+
     /**
      * 新增
      */

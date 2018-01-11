@@ -55,8 +55,27 @@ public class OrderServiceImpl implements OrderService {
     private final Sequence payOrderNoSequence = new Sequence(0, 0);
 
     @Override
+    public void affirm(Long orderId, Integer dispose) {
+        OrderEntity orderEntity = orderDao.queryObject(orderId);
+        if (dispose == 0) {
+            orderEntity.setStatus(OrderStatus.REFUSE_AND_UNREFUND.getOrderStatusValue());
+            orderDao.update(orderEntity);
+        } else if (dispose == 1) {
+            orderEntity.setStatus(OrderStatus.IN_INSURANCE.getOrderStatusValue());
+            orderDao.update(orderEntity);
+        } else {
+            logger.info("不存在该订单处理状态");
+        }
+    }
+
+    @Override
     public OrderEntity queryObject(Long id) {
         return orderDao.queryObject(id);
+    }
+
+    @Override
+    public OrderEntity queryOrderByOrderNo(String orderNo) {
+        return orderDao.queryOrderByOrderNo(orderNo);
     }
 
     @Override
