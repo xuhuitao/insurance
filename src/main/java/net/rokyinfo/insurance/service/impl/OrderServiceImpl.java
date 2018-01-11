@@ -57,6 +57,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void affirm(Long orderId, Integer dispose) {
         OrderEntity orderEntity = orderDao.queryObject(orderId);
+        if (orderEntity.getStatus() != OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue()) {
+            throw new RkException("该订单未支付");
+        }
         if (dispose == 0) {
             orderEntity.setStatus(OrderStatus.REFUSE_AND_UNREFUND.getOrderStatusValue());
             orderDao.update(orderEntity);
@@ -64,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
             orderEntity.setStatus(OrderStatus.IN_INSURANCE.getOrderStatusValue());
             orderDao.update(orderEntity);
         } else {
-            logger.info("不存在该订单处理状态");
+            throw new RkException("只能对订单进行审核通过或拒绝的操作");
         }
     }
 
