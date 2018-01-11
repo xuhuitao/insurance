@@ -33,9 +33,7 @@
         <result property="activationTime" column="activation_time"/>
         <result property="expirationTime" column="expiration_time"/>
         <result property="userId" column="userId"/>
-
-        <result property="billImg" column="bill_img" javaType="java.lang.String" jdbcType="VARCHAR"
-                typeHandler="net.rokyinfo.insurance.config.UrlTypeHandler"/>
+        <result property="billImg" column="bill_img"/>
 
         <result property="scooterImg" column="scooter_img" javaType="java.util.List" jdbcType="VARCHAR"
                 typeHandler="net.rokyinfo.insurance.config.ListTypeHandler"/>
@@ -52,6 +50,26 @@
     <select id="queryObject" resultType="net.rokyinfo.insurance.entity.OrderEntity">
 		select * from ins_order where id = #{value}
 	</select>
+
+    <select id="queryCcuSnOfOrder" resultType="java.lang.String">
+        select ccu_sn from ins_order
+        <where>
+            <if test="status != null">`status` = #{status}</if>
+            <if test="belong != null">AND `belong` = #{belong}</if>
+            <if test="userId != null">AND `userId` = #{userId}</if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
 
     <select id="queryList" resultMap="insOrderMap">
         select * from ins_order

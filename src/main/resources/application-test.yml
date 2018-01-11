@@ -25,4 +25,7 @@ insurance:
             prefix: http://localhost/insurance/res/
 
 remote:
-    url: http://192.168.102.17:19606
+    url:
+     order: http://192.168.102.17:19606
+     ebike: http://192.168.102.16:19602
+

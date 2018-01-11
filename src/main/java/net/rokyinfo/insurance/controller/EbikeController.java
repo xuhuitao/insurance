@@ -3,16 +3,22 @@ package net.rokyinfo.insurance.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import net.rokyinfo.insurance.entity.OrderEntity;
+import net.rokyinfo.insurance.entity.Ebike;
+import net.rokyinfo.insurance.entity.UserEntity;
 import net.rokyinfo.insurance.retrofit.RemoteService;
+import net.rokyinfo.insurance.service.OrderService;
+import net.rokyinfo.insurance.service.UserService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +28,12 @@ public class EbikeController {
 
     @Autowired
     private RemoteService remoteService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 列表
@@ -35,17 +47,26 @@ public class EbikeController {
             @ApiImplicitParam(name = "order", value = "排序顺序：desc", required = false, dataType = "String", paramType = "query")}
     )
     @GetMapping("")
-    public R list(@RequestParam Map<String, Object> params) {
+    public R list(@RequestParam Map<String, Object> params) throws IOException {
         //查询列表数据
         Query query = new Query(params);
 
-//        List<OrderEntity> insOrderList = orderService.queryList(query);
-//        int total = orderService.queryTotal(query);
-//
-//        PageUtils pageUtil = new PageUtils(insOrderList, total, query.getLimit(), query.getPage());
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
 
-//        return new R<>(pageUtil);
-        return null;
+        //该用户所属保险公司
+        query.put("belong", user.getBelong());
+
+        List<String> orderCcuSnList = orderService.queryCcuSnOfOrder(query);
+        int total = orderService.queryTotal(query);
+
+        List<Ebike> ebikeList = null;
+        if (orderCcuSnList != null && orderCcuSnList.size() > 0) {
+            ebikeList = remoteService.getEbikeList(orderCcuSnList);;
+        }
+
+        PageUtils pageUtil = new PageUtils(ebikeList, total, query.getLimit(), query.getPage());
+        return new R<>(pageUtil);
     }
 
 }

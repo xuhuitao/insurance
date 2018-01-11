@@ -18,6 +18,8 @@ public interface OrderService {
 
     OrderEntity queryObject(Long id);
 
+    List<String> queryCcuSnOfOrder(Map<String, Object> map);
+
     List<OrderEntity> queryList(Map<String, Object> map);
 
     int queryTotal(Map<String, Object> map);

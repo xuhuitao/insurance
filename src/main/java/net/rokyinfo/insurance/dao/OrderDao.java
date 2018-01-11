@@ -2,6 +2,8 @@ package net.rokyinfo.insurance.dao;
 
 import net.rokyinfo.insurance.entity.OrderEntity;
 import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 保险订单表
@@ -12,5 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface OrderDao extends BaseDao<OrderEntity> {
+
+    List<String> queryCcuSnOfOrder(Map<String, Object> map);
 
 }

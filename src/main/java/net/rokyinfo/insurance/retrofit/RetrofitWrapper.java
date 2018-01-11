@@ -6,14 +6,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class RetrofitWrapper {
 
-    @Value("${remote.url}")
-    private String remoteUrl;
+    @Value("${remote.url.order}")
+    private String remoteUrlOrder;
+
+    @Value("${remote.url.ebike}")
+    private String remoteUrlEbike;
 
     private Retrofit getRetrofit(String url){
 
@@ -31,8 +33,16 @@ public class RetrofitWrapper {
         return retrofit;
     }
 
-    public RemoteApi getRemoteApi(){
-        return getRetrofit(remoteUrl).create(RemoteApi.class);
+    private RemoteApi getRemoteApi(String url){
+        return getRetrofit(url).create(RemoteApi.class);
+    }
+
+    public RemoteApi getOrderApi() {
+        return getRemoteApi(remoteUrlOrder);
+    }
+
+    public RemoteApi getEbikeApi() {
+        return getRemoteApi(remoteUrlEbike);
     }
 
 }
