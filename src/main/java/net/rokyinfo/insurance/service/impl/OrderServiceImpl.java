@@ -115,6 +115,9 @@ public class OrderServiceImpl implements OrderService {
     public R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException {
 
         SolutionEntity solutionEntity = solutionService.queryObject(insOrder.getSolutionId());
+        if (solutionEntity == null) {
+            throw new RkException("不存在该保险产品方案");
+        }
         insOrder.setPrice(solutionEntity.getPrice());
 
         ChargeProductEntity chargeProductEntity = new ChargeProductEntity();
@@ -143,6 +146,9 @@ public class OrderServiceImpl implements OrderService {
         insOrder.setScooterImg(scooterImgLinks);
 
         ProductEntity productEntity = productService.queryObject(insOrder.getProductId());
+        if (productEntity == null) {
+            throw new RkException("不存在该保险产品");
+        }
         insOrder.setBelong(productEntity.getBelong());
 
         Date curTime = new Date();
