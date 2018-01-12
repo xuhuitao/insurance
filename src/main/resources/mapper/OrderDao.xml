@@ -48,7 +48,7 @@
     </resultMap>
 
     <select id="queryOrderByOrderNo" resultMap="insOrderMap">
-        select * from ins_order where orderNo = #{orderNo}
+        select * from ins_order where order_no = #{orderNo}
     </select>
 
     <select id="queryOrderByCcuSn" resultMap="insOrderMap">
