@@ -1,5 +1,7 @@
 package net.rokyinfo.insurance.config;
 
+import net.rokyinfo.insurance.util.SpringContextUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.util.TextUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -13,9 +15,6 @@ import java.sql.SQLException;
 @MappedTypes(String.class)
 @MappedJdbcTypes({JdbcType.VARCHAR})
 public class UrlTypeHandler extends BaseTypeHandler<String> {
-
-    //    @Value("${insurance.res.image.request.url.prefix}")
-    public static final String urlPrefix = "http://localhost/insurance/res/";
 
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, String str, JdbcType jdbcType) throws SQLException {
@@ -44,7 +43,8 @@ public class UrlTypeHandler extends BaseTypeHandler<String> {
 
     private String handleField(String str) {
         if (!TextUtils.isEmpty(str)) {
-            return urlPrefix + str;
+            ConfigParameter configParameter = SpringContextUtils.getBean("configParameter",ConfigParameter.class);
+            return configParameter.getUrlBillPrefix() + str;
         }
         return str;
     }
