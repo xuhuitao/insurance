@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.rokyinfo.insurance.entity.Ebike;
 import net.rokyinfo.insurance.entity.UserEntity;
+import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.retrofit.RemoteService;
 import net.rokyinfo.insurance.service.OrderService;
 import net.rokyinfo.insurance.service.UserService;
@@ -56,8 +57,11 @@ public class EbikeController {
 
         //该用户所属保险公司
         query.put("belong", user.getBelong());
+        //只查询出保障中的保险订单
+        query.put("status", OrderStatus.IN_INSURANCE.getOrderStatusValue());
 
         List<String> orderCcuSnList = orderService.queryCcuSnOfOrder(query);
+
         List<Ebike> ebikeList = remoteService.getEbikeList(orderCcuSnList);;
         int total = orderService.queryTotal(query);
 
