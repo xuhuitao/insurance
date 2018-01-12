@@ -24,8 +24,6 @@
         <result property="vin" column="vin"/>
         <result property="buyTime" column="buy_time"/>
         <result property="buyPrice" column="buy_price"/>
-        <result property="billImg" column="bill_img"/>
-        <result property="scooterImg" column="scooter_img"/>
         <result property="ccuSn" column="ccu_sn"/>
         <result property="belong" column="belong"/>
         <result property="price" column="price"/>
@@ -35,6 +33,10 @@
         <result property="activationTime" column="activation_time"/>
         <result property="expirationTime" column="expiration_time"/>
         <result property="userId" column="userId"/>
+        <result property="billImg" column="bill_img" typeHandler="net.rokyinfo.insurance.config.UrlTypeHandler"/>
+
+        <result property="scooterImg" column="scooter_img"
+                typeHandler="net.rokyinfo.insurance.config.ListTypeHandler"/>
 
         <association property="solutionEntity" column="solution_id"
                      javaType="net.rokyinfo.insurance.entity.SolutionEntity" select="net.rokyinfo.insurance.dao.SolutionDao.queryObject">
@@ -45,14 +47,44 @@
         </association>
     </resultMap>
 
-    <select id="queryObject" resultType="net.rokyinfo.insurance.entity.OrderEntity">
-		select * from ins_order where id = #{value}
+    <select id="queryOrderByOrderNo" resultMap="insOrderMap">
+        select * from ins_order where orderNo = #{orderNo}
+    </select>
+
+    <select id="queryOrderByCcuSn" resultMap="insOrderMap">
+		select * from ins_order where ccu_sn = #{ccuSn}
 	</select>
+
+    <select id="queryObject" resultMap="insOrderMap">
+        select * from ins_order where id = #{value}
+    </select>
+
+    <select id="queryCcuSnOfOrder" resultType="java.lang.String">
+        select ccu_sn from ins_order
+        <where>
+            <if test="status != null">`status` = #{status}</if>
+            <if test="belong != null">AND `belong` = #{belong}</if>
+            <if test="userId != null">AND `userId` = #{userId}</if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
 
     <select id="queryList" resultMap="insOrderMap">
         select * from ins_order
         <where>
             <if test="status != null">`status` = #{status}</if>
+            <if test="belong != null">AND `belong` = #{belong}</if>
+            <if test="userId != null">AND `userId` = #{userId}</if>
         </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -71,6 +103,8 @@
 		select count(*) from ins_order
         <where>
             <if test="status != null">`status` = #{status}</if>
+            <if test="belong != null">AND `belong` = #{belong}</if>
+            <if test="userId != null">AND `userId` = #{userId}</if>
         </where>
 	</select>
 
@@ -107,7 +141,8 @@
 			`trx_no`, 
 			`payment`, 
 			`activation_time`, 
-			`expiration_time`
+			`expiration_time`,
+			`userId`
 		)
 		values
 		(
@@ -140,7 +175,8 @@
 			#{trxNo}, 
 			#{payment}, 
 			#{activationTime}, 
-			#{expirationTime}
+			#{expirationTime},
+			#{userId}
 		)
 	</insert>
 

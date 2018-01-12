@@ -4,18 +4,24 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.rokyinfo.insurance.entity.OrderEntity;
+import net.rokyinfo.insurance.json.JSON;
 import net.rokyinfo.insurance.service.OrderService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.jeecgframework.poi.excel.ExcelExportUtil;
+import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
  * 保险订单表
  *
@@ -43,6 +49,7 @@ public class OrderController {
             @ApiImplicitParam(name = "order", value = "排序顺序：desc", required = false, dataType = "String", paramType = "query")}
     )
     @GetMapping("")
+    @JSON(type = OrderEntity.class, filter = "billFile,scooterFiles")
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
@@ -65,8 +72,32 @@ public class OrderController {
     @GetMapping("/{id}")
     public R info(@PathVariable("id") Long id) {
         OrderEntity insOrder = orderService.queryObject(id);
-
         return new R<>(insOrder);
+    }
+
+    @ApiOperation(value = "审批", notes = "")
+    @ApiImplicitParam(name = "id", value = "", required = true, dataType = "Integer", paramType = "path")
+    @PutMapping("/{id}")
+    public R affirm(@PathVariable("id") Long id, @RequestParam Integer dispose) {
+        orderService.affirm(id, dispose);
+        return new R<>();
+    }
+
+    @GetMapping("/excel")
+    public void exportExcel(@RequestParam(required = false) Integer status, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 告诉浏览器用什么软件可以打开此文件
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        // 下载文件的默认名称
+        response.setHeader("Content-Disposition", "attachment;filename=insurance-order.xls");
+
+        //TODO 获取username 得到该user的belong
+        Map<String, Object> params = new HashMap<>();
+        if (status != null) {
+            params.put("status", status);
+        }
+        List<OrderEntity> orderEntityList = orderService.queryList(params);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), OrderEntity.class, orderEntityList);
+        workbook.write(response.getOutputStream());
     }
 
     /**
@@ -74,11 +105,9 @@ public class OrderController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public R save(@Valid @ModelAttribute OrderEntity insOrder) {
-
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public R save(@Valid @ModelAttribute OrderEntity insOrder) throws IOException {
         return orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
-
     }
 
     /**
@@ -86,10 +115,9 @@ public class OrderController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
-    @PutMapping("/")
+    @PutMapping("")
     public R update(@RequestBody OrderEntity insOrder) {
         orderService.update(insOrder);
-
         return new R<>();
     }
 
@@ -98,10 +126,9 @@ public class OrderController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         orderService.deleteBatch(ids);
-
         return new R<>();
     }
 

@@ -1,14 +1,15 @@
 package net.rokyinfo.insurance.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecgframework.poi.excel.annotation.Excel;
+import org.jeecgframework.poi.excel.annotation.ExcelTarget;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
+import java.util.List;
 /**
  * 保险订单表
  *
@@ -16,16 +17,15 @@ import java.util.Date;
  * @email yangyang.cao@gmail.com
  * @date 2018-01-08 10:31:21
  */
+@ExcelTarget("order")
 public class OrderEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //主键
     private Long id;
     //版本号
-    @NotNull(message = "版本号不能为空")
     private Integer version;
     //创建者
-    @NotNull(message = "创建者不能为空")
     private String creator;
     //创建时间
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -36,33 +36,40 @@ public class OrderEntity implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
     //订单状态   0:待支付 ；1：已支付,待审核  2： 已生效，保障中 3：已过期 4：已拒绝，未退款 5：已拒绝，已退款
-    @NotNull(message = "订单状态不能为空")
+    @Excel(name = "订单状态", orderNum = "3", replace = {"待支付_0", "已支付,待审核_1", "已生效,保障中_2", "已过期_3", "已拒绝,未退款_4", "已拒绝,已退款_4"})
     private Integer status;
     //投保人姓名
     @NotNull(message = "投保人姓名不能为空")
+    @Excel(name = "姓名", orderNum = "9")
     private String applicant;
     //手机号码
     @NotNull(message = "手机号码不能为空")
+    @Excel(name = "手机号码", orderNum = "10")
     private String phoneNumber;
     //证件类型
     @NotNull(message = "证件类型不能为空")
     private Integer idType;
     //身份证号码
     @NotNull(message = "身份证号码不能为空")
+    @Excel(name = "身份证号码", orderNum = "11")
     private String idNumber;
     //省
     @NotNull(message = "省不能为空")
+    @Excel(name = "省", orderNum = "12")
     private String province;
     //市
     @NotNull(message = "市不能为空")
+    @Excel(name = "市", orderNum = "13")
     private String city;
     //区
     private String district;
     //车辆品牌
     @NotNull(message = "车辆品牌不能为空")
+    @Excel(name = "车辆品牌", orderNum = "5")
     private String brand;
     //车辆型号
     @NotNull(message = "车辆型号不能为空")
+    @Excel(name = "车辆型号", orderNum = "6")
     private String model;
     //车架号
     @NotNull(message = "车架号不能为空")
@@ -71,19 +78,21 @@ public class OrderEntity implements Serializable {
     @NotNull(message = "车辆购买日期不能为空")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "车辆购买日期", orderNum = "7", format = "yyyy-MM-dd")
     private Date buyTime;
     //车辆购买价格
     @NotNull(message = "车辆购买价格不能为空")
+    @Excel(name = "车辆购买价格", orderNum = "8")
     private BigDecimal buyPrice;
     //发票图片
     private String billImg;
     //车辆图片
-    private String scooterImg;
+    private List<String> scooterImg;
     //中控SN号
     @NotNull(message = "中控SN号不能为空")
+    @Excel(name = "中控SN号", orderNum = "4")
     private String ccuSn;
     //所属保险公司ID
-    @NotNull(message = "所属保险公司ID不能为空")
     private Long belong;
     //产品
     @NotNull(message = "产品ID不能为空")
@@ -94,9 +103,10 @@ public class OrderEntity implements Serializable {
     private Long solutionId;
     private SolutionEntity solutionEntity;
     //订单价格
-    @NotNull(message = "订单价格不能为空")
+    @Excel(name = "订单价格", orderNum = "2")
     private BigDecimal price;
     //订单流水号
+    @Excel(name = "订单号", orderNum = "1")
     private String orderNo;
     //支付流水号
     private String trxNo;
@@ -109,11 +119,12 @@ public class OrderEntity implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expirationTime;
     //骑多多系统用户ID
+    @NotNull(message = "用户ID不能为空")
     private String userId;
     //上传的发票图片
     private MultipartFile billFile;
     //上传的车辆图片
-    private MultipartFile scooterFiles;
+    private MultipartFile[] scooterFiles;
 
     /**
      * 获取：主键
@@ -392,14 +403,14 @@ public class OrderEntity implements Serializable {
     /**
      * 获取：车辆图片
      */
-    public String getScooterImg() {
+    public List<String> getScooterImg() {
         return scooterImg;
     }
 
     /**
      * 设置：车辆图片
      */
-    public void setScooterImg(String scooterImg) {
+    public void setScooterImg(List<String> scooterImg) {
         this.scooterImg = scooterImg;
     }
 
@@ -563,11 +574,11 @@ public class OrderEntity implements Serializable {
         this.solutionId = solutionId;
     }
 
-    public MultipartFile getScooterFiles() {
+    public MultipartFile[] getScooterFiles() {
         return scooterFiles;
     }
 
-    public void setScooterFiles(MultipartFile scooterFiles) {
+    public void setScooterFiles(MultipartFile[] scooterFiles) {
         this.scooterFiles = scooterFiles;
     }
 }

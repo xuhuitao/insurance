@@ -7,7 +7,7 @@ public enum OrderStatus {
     IN_INSURANCE(2, "已生效，保障中"),
     EXPIRE(3, "已过期"),
     REFUSE_AND_UNREFUND(4, "已拒绝，未退款"),
-    REFUSE_AND_REFUND(5, "已拒绝，未退款");
+    REFUSE_AND_REFUND(5, "已拒绝，已退款");
 
     private int status;
 

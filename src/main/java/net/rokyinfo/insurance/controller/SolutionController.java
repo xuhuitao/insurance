@@ -84,7 +84,7 @@ public class SolutionController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insSolution", value = "", required = true, dataType = "SolutionEntity")
-    @PutMapping("/")
+    @PutMapping("")
     public R update(@RequestBody SolutionEntity insSolution) {
         solutionService.update(insSolution);
 
@@ -96,7 +96,7 @@ public class SolutionController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         solutionService.deleteBatch(ids);
 
