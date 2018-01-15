@@ -83,7 +83,7 @@
             <if test="belong != null">AND `belong` = #{belong}</if>
             <if test="userId != null">AND `userId` = #{userId}</if>
             <if test="ccuSn != null">AND `ccu_sn` = #{ccuSn}</if>
-            <if test="applicant != null">`applicant` = #{applicant}</if>
+            <if test="applicant != null">AND `applicant` = #{applicant}</if>
         </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -105,7 +105,7 @@
             <if test="belong != null">AND `belong` = #{belong}</if>
             <if test="userId != null">AND `userId` = #{userId}</if>
             <if test="ccuSn != null">AND `ccu_sn` = #{ccuSn}</if>
-            <if test="applicant != null">`applicant` = #{applicant}</if>
+            <if test="applicant != null">AND `applicant` = #{applicant}</if>
         </where>
 	</select>
 
