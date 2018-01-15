@@ -1,6 +1,7 @@
 package net.rokyinfo.insurance.config;
 
 import net.rokyinfo.insurance.util.JacksonUtil;
+import net.rokyinfo.insurance.util.SpringContextUtils;
 import org.apache.http.util.TextUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -46,8 +47,9 @@ public class ListTypeHandler extends BaseTypeHandler<List<String>> {
         if (!TextUtils.isEmpty(str)) {
             List<String> strings = JacksonUtil.readValue(str, List.class);
             List<String> list = new ArrayList<>();
+            ConfigParameter configParameter = SpringContextUtils.getBean("configParameter",ConfigParameter.class);
             strings.forEach( s -> {
-                list.add(UrlTypeHandler.urlPrefix + s);
+                list.add(configParameter.getUrlScooterPrefix() + s);
             });
             return list;
         }
