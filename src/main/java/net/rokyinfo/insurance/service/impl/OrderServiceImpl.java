@@ -85,11 +85,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderEntity queryOrderByCcuSn(String ccuSn) {
-        return orderDao.queryOrderByCcuSn(ccuSn);
-    }
-
-    @Override
     public List<OrderEntity> queryList(Map<String, Object> map) {
         return orderDao.queryList(map);
     }
@@ -108,10 +103,16 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = Exception.class)
     public R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException {
 
-        OrderEntity orderEntity = orderDao.queryOrderByCcuSn(insOrder.getCcuSn());
-        if (orderEntity != null && (orderEntity.getStatus() == OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue()
-            || orderEntity.getStatus() == OrderStatus.IN_INSURANCE.getOrderStatusValue())) {
-            throw new RkException("该中控序列号已存在订单");
+        Map<String, Object> params = new HashMap<>();
+        params.put("ccuSn", insOrder.getCcuSn());
+        List<OrderEntity> orderEntityList = orderDao.queryList(params);
+        if (orderEntityList != null && orderEntityList.size() > 0) {
+            orderEntityList.forEach(orderEntity -> {
+                if (orderEntity.getStatus() == OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue()
+                        || orderEntity.getStatus() == OrderStatus.IN_INSURANCE.getOrderStatusValue()) {
+                    throw new RkException("该中控序列号已存在订单");
+                }
+            });
         }
 
         List<String> ccuSnList = new ArrayList<>();

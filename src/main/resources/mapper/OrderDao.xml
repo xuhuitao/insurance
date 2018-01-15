@@ -51,10 +51,6 @@
         select * from ins_order where orderNo = #{orderNo}
     </select>
 
-    <select id="queryOrderByCcuSn" resultMap="insOrderMap">
-		select * from ins_order where ccu_sn = #{ccuSn}
-	</select>
-
     <select id="queryObject" resultMap="insOrderMap">
         select * from ins_order where id = #{value}
     </select>

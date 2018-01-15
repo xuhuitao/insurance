@@ -15,6 +15,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * @author yuanzhijian
  */
@@ -38,11 +41,20 @@ public class AlarmMsgReceiver {
         }
         // 存储Message
         logger.info(alarmMsg.toString());
-        OrderEntity orderEntity = orderService.queryOrderByCcuSn(alarmMsg.getCcSn());
-        if (orderEntity == null) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("ccuSn", alarmMsg.getCcSn());
+        List<OrderEntity> orderEntityList = orderService.queryList(params);
+        if (orderEntityList == null || orderEntityList.size() == 0) {
             return;
         }
-        if (orderEntity.getStatus() != OrderStatus.IN_INSURANCE.getOrderStatusValue()) {
+        OrderEntity inInsuranceOrderEntity = null;
+        for(OrderEntity orderEntity : orderEntityList) {
+            if (orderEntity.getStatus() == OrderStatus.IN_INSURANCE.getOrderStatusValue()) {
+                inInsuranceOrderEntity = orderEntity;
+                break;
+            }
+        }
+        if (inInsuranceOrderEntity == null) {
             return;
         }
         AlarmMessageEntity alarmMessageEntity = new AlarmMessageEntity();
@@ -53,7 +65,7 @@ public class AlarmMsgReceiver {
             alarmMessageEntity.setAlarmType(Integer.parseInt(alarmMsg.getAlarmType()));
         }
         alarmMessageEntity.setContent(alarmMsg.getContent());
-        alarmMessageEntity.setBelong(orderEntity.getBelong());
+        alarmMessageEntity.setBelong(inInsuranceOrderEntity.getBelong());
         Date curTime = new Date();
         alarmMessageEntity.setCreateTime(curTime);
         alarmMessageEntity.setAlarmTime(curTime);
