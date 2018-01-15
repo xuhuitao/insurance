@@ -4,8 +4,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.rokyinfo.insurance.entity.OrderEntity;
+import net.rokyinfo.insurance.entity.UserEntity;
 import net.rokyinfo.insurance.json.JSON;
 import net.rokyinfo.insurance.service.OrderService;
+import net.rokyinfo.insurance.service.UserService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
@@ -13,6 +15,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.jeecgframework.poi.excel.ExcelExportUtil;
 import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +39,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 列表
@@ -90,8 +97,10 @@ public class OrderController {
         // 下载文件的默认名称
         response.setHeader("Content-Disposition", "attachment;filename=insurance-order.xls");
 
-        //TODO 获取username 得到该user的belong
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
         Map<String, Object> params = new HashMap<>();
+        params.put("belong", user.getBelong());
         if (status != null) {
             params.put("status", status);
         }

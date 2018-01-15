@@ -19,6 +19,7 @@
         <result property="desc" column="desc"/>
         <result property="image" column="image"/>
         <result property="price" column="price"/>
+        <result property="coverage" column="coverage"/>
         <result property="indate" column="indate"/>
     </resultMap>
 
@@ -64,7 +65,8 @@
 			`name`, 
 			`desc`, 
 			`image`, 
-			`price`, 
+			`price`,
+			`coverage`,
 			`indate`
 		)
 		values
@@ -81,7 +83,8 @@
 			#{name}, 
 			#{desc}, 
 			#{image}, 
-			#{price}, 
+			#{price},
+			#{coverage},
 			#{indate}
 		)
 	</insert>
@@ -102,6 +105,7 @@
             <if test="desc != null">`desc` = #{desc},</if>
             <if test="image != null">`image` = #{image},</if>
             <if test="price != null">`price` = #{price},</if>
+            <if test="coverage != null">`coverage` = #{coverage},</if>
             <if test="indate != null">`indate` = #{indate}</if>
         </set>
         where id = #{id}

@@ -1,11 +1,12 @@
 package net.rokyinfo.insurance.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import net.rokyinfo.insurance.util.FormatUtils;
+import org.jeecgframework.poi.excel.annotation.Excel;
+import org.jeecgframework.poi.excel.annotation.ExcelTarget;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
 /**
  * 保险产品方案表
  *
@@ -13,6 +14,7 @@ import java.util.Date;
  * @email yangyang.cao@gmail.com
  * @date 2018-01-08 10:31:21
  */
+@ExcelTarget("solutionEntity")
 public class SolutionEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -46,216 +48,157 @@ public class SolutionEntity implements Serializable {
     private String image;
     //单价
     private BigDecimal price;
+    //保险额度
+    private BigDecimal coverage;
     //有效期：单位月
     private Integer indate;
 
     /**
-     * 获取：主键
+     * excel导出字段
      */
+    //保险额度
+    @Excel(name = "保额", orderNum = "6")
+    private BigDecimal coverageExcel;
+
     public Long getId() {
         return id;
     }
 
-    /**
-     * 设置：主键
-     */
     public void setId(Long id) {
         this.id = id;
     }
 
-    /**
-     * 获取：版本号
-     */
     public Integer getVersion() {
         return version;
     }
 
-    /**
-     * 设置：版本号
-     */
     public void setVersion(Integer version) {
         this.version = version;
     }
 
-    /**
-     * 获取：创建时间
-     */
     public Date getCreateTime() {
         return createTime;
     }
 
-    /**
-     * 设置：创建时间
-     */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    /**
-     * 获取：修改者
-     */
     public String getModifier() {
         return modifier;
     }
 
-    /**
-     * 设置：修改者
-     */
     public void setModifier(String modifier) {
         this.modifier = modifier;
     }
 
-    /**
-     * 获取：创建者
-     */
     public String getCreator() {
         return creator;
     }
 
-    /**
-     * 设置：创建者
-     */
     public void setCreator(String creator) {
         this.creator = creator;
     }
 
-    /**
-     * 获取：最后修改时间
-     */
     public Date getModifyTime() {
         return modifyTime;
     }
 
-    /**
-     * 设置：最后修改时间
-     */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 
-    /**
-     * 获取：备注
-     */
     public String getRemark() {
         return remark;
     }
 
-    /**
-     * 设置：备注
-     */
     public void setRemark(String remark) {
         this.remark = remark;
     }
 
-    /**
-     * 获取：状态 ENABLE 可用 DISABLE 不可用
-     */
     public String getStatus() {
         return status;
     }
 
-    /**
-     * 设置：状态 ENABLE 可用 DISABLE 不可用
-     */
     public void setStatus(String status) {
         this.status = status;
     }
 
-    /**
-     * 获取：保险产品ID
-     */
     public Long getProductId() {
         return productId;
     }
 
-    /**
-     * 设置：保险产品ID
-     */
     public void setProductId(Long productId) {
         this.productId = productId;
     }
 
-    /**
-     * 获取：方案编号
-     */
     public String getCode() {
         return code;
     }
 
-    /**
-     * 设置：方案编号
-     */
     public void setCode(String code) {
         this.code = code;
     }
 
-    /**
-     * 获取：方案名称
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * 设置：方案名称
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * 获取：方案描述
-     */
     public String getDesc() {
         return desc;
     }
 
-    /**
-     * 设置：方案描述
-     */
     public void setDesc(String desc) {
         this.desc = desc;
     }
 
-    /**
-     * 获取：方案图片
-     */
     public String getImage() {
         return image;
     }
 
-    /**
-     * 设置：方案图片
-     */
     public void setImage(String image) {
         this.image = image;
     }
 
-    /**
-     * 获取：单价
-     */
     public BigDecimal getPrice() {
         return price;
     }
 
-    /**
-     * 设置：单价
-     */
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    /**
-     * 获取：有效期：单位月
-     */
+    public BigDecimal getCoverage() {
+        return coverage;
+    }
+
+    public void setCoverage(BigDecimal coverage) {
+        this.coverage = coverage;
+    }
+
     public Integer getIndate() {
         return indate;
     }
 
-    /**
-     * 设置：有效期：单位月
-     */
     public void setIndate(Integer indate) {
         this.indate = indate;
+    }
+
+    public String getCoverageExcel() {
+        if (coverage == null) {
+            return "";
+        }
+        if (coverage.intValue() == 0) {
+            return "";
+        }
+        return FormatUtils.formatDecimal(coverage, FormatUtils.TWO_DECIMAL);
+    }
+
+    public void setCoverageExcel(BigDecimal coverageExcel) {
+        this.coverageExcel = coverageExcel;
     }
 }

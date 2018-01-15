@@ -1,11 +1,8 @@
 package net.rokyinfo.insurance.service.impl;
 
-import net.rokyinfo.insurance.entity.ChargeProductEntity;
-import net.rokyinfo.insurance.entity.ProductEntity;
+import net.rokyinfo.insurance.entity.*;
 import net.rokyinfo.insurance.enums.*;
 import net.rokyinfo.insurance.dao.OrderDao;
-import net.rokyinfo.insurance.entity.OrderEntity;
-import net.rokyinfo.insurance.entity.SolutionEntity;
 import net.rokyinfo.insurance.exception.RkException;
 import net.rokyinfo.insurance.exception.RkInvalidRequestException;
 import net.rokyinfo.insurance.retrofit.RemoteService;
@@ -110,6 +107,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException {
+
+        OrderEntity orderEntity = orderDao.queryOrderByCcuSn(insOrder.getCcuSn());
+        if (orderEntity != null && (orderEntity.getStatus() == OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue()
+            || orderEntity.getStatus() == OrderStatus.IN_INSURANCE.getOrderStatusValue())) {
+            throw new RkException("该中控序列号已存在订单");
+        }
+
+        List<String> ccuSnList = new ArrayList<>();
+        ccuSnList.add(orderEntity.getCcuSn());
+        List<Ebike> ebikeList = remoteService.getEbikeList(ccuSnList);
+        if (ebikeList == null || ebikeList.size() == 0) {
+            throw new RkException("不存在该中控序列号，请核对车辆的中控序列号");
+        }
+        if (!ebikeList.get(0).isOnline()) {
+            throw new RkException("该车辆已离线，不能生成订单");
+        }
 
         SolutionEntity solutionEntity = solutionService.queryObject(insOrder.getSolutionId());
         if (solutionEntity == null) {
