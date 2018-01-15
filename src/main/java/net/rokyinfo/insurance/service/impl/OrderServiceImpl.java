@@ -115,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         List<String> ccuSnList = new ArrayList<>();
-        ccuSnList.add(orderEntity.getCcuSn());
+        ccuSnList.add(insOrder.getCcuSn());
         List<Ebike> ebikeList = remoteService.getEbikeList(ccuSnList);
         if (ebikeList == null || ebikeList.size() == 0) {
             throw new RkException("不存在该中控序列号，请核对车辆的中控序列号");

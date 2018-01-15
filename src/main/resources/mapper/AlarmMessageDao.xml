@@ -24,6 +24,9 @@
 
 	<select id="queryList" resultType="net.rokyinfo.insurance.entity.AlarmMessageEntity">
 		select * from ue_alarm_message
+		<where>
+			<if test="belong != null">AND `belong` = #{belong}</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -38,7 +41,10 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from ue_alarm_message 
+		select count(*) from ue_alarm_message
+		<where>
+			<if test="belong != null">AND `belong` = #{belong}</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="net.rokyinfo.insurance.entity.AlarmMessageEntity" useGeneratedKeys="true" keyProperty="id">
