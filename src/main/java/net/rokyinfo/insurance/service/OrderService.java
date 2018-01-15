@@ -21,8 +21,6 @@ public interface OrderService {
 
     OrderEntity queryOrderByOrderNo(String orderNo);
 
-    OrderEntity queryOrderByCcuSn(String ccuSn);
-
     List<OrderEntity> queryList(Map<String, Object> map);
 
     int queryTotal(Map<String, Object> map);

@@ -97,10 +97,10 @@ public class OrderController {
         // 下载文件的默认名称
         response.setHeader("Content-Disposition", "attachment;filename=insurance-order.xls");
 
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
+//        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+//        UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
         Map<String, Object> params = new HashMap<>();
-        params.put("belong", user.getBelong());
+//        params.put("belong", user.getBelong());
         if (status != null) {
             params.put("status", status);
         }

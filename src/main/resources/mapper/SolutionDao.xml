@@ -46,7 +46,10 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from ins_solution 
+		select count(*) from ins_solution
+        <where>
+            <if test="productId != null">`product_id` = #{productId}</if>
+        </where>
 	</select>
 
     <insert id="save" parameterType="net.rokyinfo.insurance.entity.SolutionEntity" useGeneratedKeys="true"

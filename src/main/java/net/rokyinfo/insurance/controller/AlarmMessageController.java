@@ -5,10 +5,14 @@ import java.util.Map;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.rokyinfo.insurance.entity.UserEntity;
+import net.rokyinfo.insurance.service.UserService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import net.rokyinfo.insurance.entity.AlarmMessageEntity;
 import net.rokyinfo.insurance.service.AlarmMessageService;
@@ -25,6 +29,9 @@ import springfox.documentation.annotations.ApiIgnore;
 public class AlarmMessageController {
 	@Autowired
 	private AlarmMessageService alarmMessageService;
+
+	@Autowired
+	private UserService userService;
 	
 	/**
 	 * 列表
@@ -41,6 +48,10 @@ public class AlarmMessageController {
 	public R list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
+
+		UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+		UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
+		query.put("belong", user.getBelong());
 
 		List<AlarmMessageEntity> alarmMessageList = alarmMessageService.queryList(query);
 		int total = alarmMessageService.queryTotal(query);
@@ -67,7 +78,7 @@ public class AlarmMessageController {
 	 * 新增
 	 */
 	@ApiOperation(value = "新增", notes = "")
-	@ApiImplicitParam(name = "insProduct", value = "", required = true, dataType = "ProductEntity")
+	@ApiImplicitParam(name = "alarmMessageEntity", value = "", required = true, dataType = "AlarmMessageEntity")
 	@PostMapping("")
 	public R save(@RequestBody AlarmMessageEntity alarmMessage){
 		alarmMessageService.save(alarmMessage);
@@ -78,7 +89,7 @@ public class AlarmMessageController {
 	 * 修改
 	 */
 	@ApiOperation(value = "修改", notes = "")
-	@ApiImplicitParam(name = "insProduct", value = "", required = true, dataType = "ProductEntity")
+	@ApiImplicitParam(name = "alarmMessageEntity", value = "", required = true, dataType = "AlarmMessageEntity")
 	@PutMapping("")
 	public R update(@RequestBody AlarmMessageEntity alarmMessage){
 		alarmMessageService.update(alarmMessage);
