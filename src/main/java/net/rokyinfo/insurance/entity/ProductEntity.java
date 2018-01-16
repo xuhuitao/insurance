@@ -42,6 +42,8 @@ public class ProductEntity implements Serializable {
     private String desc;
     //产品图片
     private String image;
+    //产品大图
+    private String imageLarge;
     //单价
     private BigDecimal price;
     //模式：SELF ：自营 OUT:外部链接
@@ -217,6 +219,14 @@ public class ProductEntity implements Serializable {
      */
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getImageLarge() {
+        return imageLarge;
+    }
+
+    public void setImageLarge(String imageLarge) {
+        this.imageLarge = imageLarge;
     }
 
     /**

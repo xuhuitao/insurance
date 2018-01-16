@@ -29,6 +29,8 @@ public interface OrderService {
 
     R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException;
 
+    R payInfo(String orderNo) throws IOException;
+
     void affirm(Long orderId, Integer dispose);
 
     void update(OrderEntity insOrder);

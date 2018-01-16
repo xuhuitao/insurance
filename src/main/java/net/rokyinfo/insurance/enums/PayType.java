@@ -3,7 +3,7 @@ package net.rokyinfo.insurance.enums;
 public enum PayType {
 
     APP("APP", "从APP进行支付"),
-    DIRECT("DIRECT", "即时到帐");
+    WAP("WAP", "手机网站支付");
 
 
 

@@ -34,14 +34,15 @@ public class PayNotifyReceiver {
         if (orderEntity == null) {
             return;
         }
-        //TODO 需测试确认equals
-        if (!orderEntity.getPrice().equals(payOrderNotifyMsg.getOrderAmount())) {
+        if (orderEntity.getPrice().compareTo(payOrderNotifyMsg.getOrderAmount()) != 0) {
             logger.warn("完成支付的金额与订单中的订单金额不一致。");
             return;
         }
+        OrderEntity updateOrderEntity = new OrderEntity();
+        updateOrderEntity.setId(orderEntity.getId());
         //变更订单状态为已支付，待审核
-        orderEntity.setStatus(OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue());
-        orderService.update(orderEntity);
+        updateOrderEntity.setStatus(OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue());
+        orderService.update(updateOrderEntity);
     }
 
 }

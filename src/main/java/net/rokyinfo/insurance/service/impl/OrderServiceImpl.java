@@ -121,8 +121,21 @@ public class OrderServiceImpl implements OrderService {
         if (ebikeList == null || ebikeList.size() == 0) {
             throw new RkException("不存在该中控序列号，请核对车辆的中控序列号");
         }
-        if (!ebikeList.get(0).isOnline()) {
+
+        Ebike ebike = ebikeList.get(0);
+
+        if (!ebike.isOnline()) {
             throw new RkException("该车辆已离线，不能生成订单");
+        }
+
+        boolean existInsurance = false;
+        if (!TextUtils.isEmpty(ebike.getInsuranceId())) {
+            //该设备已经存在保险,重置solutionId
+            existInsurance = true;
+            insOrder.setSolutionId(Long.valueOf(ebike.getInsuranceId()));
+            insOrder.setStatus(OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue());
+        } else {
+            insOrder.setStatus(OrderStatus.TO_PAY.getOrderStatusValue());
         }
 
         SolutionEntity solutionEntity = solutionService.queryObject(insOrder.getSolutionId());
@@ -131,19 +144,23 @@ public class OrderServiceImpl implements OrderService {
         }
         insOrder.setPrice(solutionEntity.getPrice());
 
-        ChargeProductEntity chargeProductEntity = new ChargeProductEntity();
-        chargeProductEntity.setCode(solutionEntity.getCode());
-        chargeProductEntity.setDesc(solutionEntity.getDesc());
-        chargeProductEntity.setName(solutionEntity.getName());
-        chargeProductEntity.setPrice(insOrder.getPrice().doubleValue());
-
         String orderNo = String.valueOf(payOrderNoSequence.nextId());
 
-        String payOrderString = remoteService.createPayOrder(insOrder.getUserId(), PayChannel.ALI_PAY.getPayChannelId(),
-                PayType.DIRECT.getPayType(), insOrder.getPrice().doubleValue(), orderNo, chargeProductEntity);
+        String payOrderString = null;
+        if (!existInsurance) {
+            //不存在预置保险的，生成支付宝支付订单
+            ChargeProductEntity chargeProductEntity = new ChargeProductEntity();
+            chargeProductEntity.setCode(solutionEntity.getCode());
+            chargeProductEntity.setDesc(solutionEntity.getDesc());
+            chargeProductEntity.setName(solutionEntity.getName());
+            chargeProductEntity.setPrice(insOrder.getPrice().doubleValue());
 
-        if (TextUtils.isEmpty(payOrderString)) {
-            throw new RkException("支付订单生成异常");
+            payOrderString = remoteService.createPayOrder(insOrder.getUserId(), PayChannel.ALI_PAY.getPayChannelId(),
+                    PayType.WAP.getPayType(), insOrder.getPrice().doubleValue(), orderNo, chargeProductEntity);
+
+            if (TextUtils.isEmpty(payOrderString)) {
+                throw new RkException("支付订单生成异常");
+            }
         }
 
         String billFileLink = storeFile(billFile, billImgPath);
@@ -165,13 +182,48 @@ public class OrderServiceImpl implements OrderService {
         Date curTime = new Date();
         insOrder.setVersion(0);
         insOrder.setCreator(CreatorEnum.SYSTEM.getCreator());
-        insOrder.setStatus(OrderStatus.TO_PAY.getOrderStatusValue());
         insOrder.setOrderNo(orderNo);
         insOrder.setCreateTime(curTime);
         orderDao.save(insOrder);
 
         return new R<>(payOrderString);
 
+    }
+
+    @Override
+    public R payInfo(String orderNo) throws IOException {
+
+        if (TextUtils.isEmpty(orderNo)) {
+            throw new RkException("请指定订单号");
+        }
+
+        OrderEntity orderEntity = orderDao.queryOrderByOrderNo(orderNo);
+        if (orderEntity == null) {
+            throw new RkException("不存在该订单");
+        }
+
+        if (orderEntity.getStatus() != OrderStatus.TO_PAY.getOrderStatusValue()) {
+            throw new RkException("该订单不是待支付状态");
+        }
+
+        SolutionEntity solutionEntity = solutionService.queryObject(orderEntity.getSolutionId());
+        if (solutionEntity == null) {
+            throw new RkException("不存在该保险产品方案");
+        }
+
+        ChargeProductEntity chargeProductEntity = new ChargeProductEntity();
+        chargeProductEntity.setCode(solutionEntity.getCode());
+        chargeProductEntity.setDesc(solutionEntity.getDesc());
+        chargeProductEntity.setName(solutionEntity.getName());
+        chargeProductEntity.setPrice(orderEntity.getPrice().doubleValue());
+
+        String payOrderString = remoteService.createPayInfo(PayChannel.ALI_PAY.getPayChannelId(), PayType.WAP.getPayType(), orderNo, chargeProductEntity);
+
+        if (TextUtils.isEmpty(payOrderString)) {
+            throw new RkException("支付订单生成异常");
+        }
+
+        return new R<>(payOrderString);
     }
 
     @Override
