@@ -40,6 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 所有 / 的所有请求 都放行
                 .antMatchers("/").permitAll()
+                // 对所有资源文件放行
+                .antMatchers("/res/**").permitAll()
                 // 对产品列表放行
                 .antMatchers(HttpMethod.GET,"/v1.0/products").permitAll()
                 // 对解决方案列表放行

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface RemoteApi {
 
-    @POST("/v3.1/gateway/create-pay-order")
+    @POST("/v3.1/gateway/create-pay-order-web")
     Call<ResponseBody> createPayOrder(@Header("X-USER-ID") String userId, @Query("payChannelId") Long payChannelId, @Query("payType") String payType,
                                                 @Query("amount") double amount, @Query("orderId") String orderId, @Query("merchantNo") String merchantNo, @Body ChargeProductEntity productEntity);
 

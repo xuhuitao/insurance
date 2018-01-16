@@ -140,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
         String orderNo = String.valueOf(payOrderNoSequence.nextId());
 
         String payOrderString = remoteService.createPayOrder(insOrder.getUserId(), PayChannel.ALI_PAY.getPayChannelId(),
-                PayType.APP.getPayType(), insOrder.getPrice().doubleValue(), orderNo, chargeProductEntity);
+                PayType.DIRECT.getPayType(), insOrder.getPrice().doubleValue(), orderNo, chargeProductEntity);
 
         if (TextUtils.isEmpty(payOrderString)) {
             throw new RkException("支付订单生成异常");
