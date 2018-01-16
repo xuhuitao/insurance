@@ -49,4 +49,14 @@ public class PayOrderNotifyMsg implements Serializable {
     public void setTrxNo(String trxNo) {
         this.trxNo = trxNo;
     }
+
+    @Override
+    public String toString() {
+        return "PayOrderNotifyMsg{" +
+                "status='" + status + '\'' +
+                ", merchantOrderNo='" + merchantOrderNo + '\'' +
+                ", orderAmount=" + orderAmount +
+                ", trxNo='" + trxNo + '\'' +
+                '}';
+    }
 }

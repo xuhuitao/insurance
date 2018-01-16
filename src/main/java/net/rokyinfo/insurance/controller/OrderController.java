@@ -56,11 +56,16 @@ public class OrderController {
             @ApiImplicitParam(name = "order", value = "排序顺序：desc", required = false, dataType = "String", paramType = "query")}
     )
     @GetMapping("")
-    @JSON(type = OrderEntity.class, filter = "billFile,scooterFiles")
+    @JSON(type = OrderEntity.class, filter = "billFile,scooterFiles,applicantExcel,idTypeExcel,idNumberExcel,phoneNumberExcel,createTimeExcel,vinExcel,ccuSnExcel,brandExcel,modelExcel,buyPriceExcel,buyTimeExcel,coverageExcel")
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
 
+        Object statusParams = query.get("status");
+        if (statusParams != null) {
+            String[] statusArray = statusParams.toString().split(",");
+            query.put("status", statusArray);
+        }
         List<OrderEntity> insOrderList = orderService.queryList(query);
         int total = orderService.queryTotal(query);
 

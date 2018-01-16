@@ -42,6 +42,7 @@ public class PayNotifyReceiver {
         updateOrderEntity.setId(orderEntity.getId());
         //变更订单状态为已支付，待审核
         updateOrderEntity.setStatus(OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue());
+        updateOrderEntity.setTrxNo(payOrderNotifyMsg.getTrxNo());
         orderService.update(updateOrderEntity);
     }
 
