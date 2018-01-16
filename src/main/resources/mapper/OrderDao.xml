@@ -81,7 +81,11 @@
     <select id="queryList" resultMap="insOrderMap">
         select * from ins_order
         <where>
-            <if test="status != null">`status` = #{status}</if>
+            <if test="status != null">`status` IN
+                <foreach item="status" collection="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
             <if test="belong != null">AND `belong` = #{belong}</if>
             <if test="userId != null">AND `userId` = #{userId}</if>
             <if test="ccuSn != null">AND `ccu_sn` = #{ccuSn}</if>
@@ -103,7 +107,11 @@
     <select id="queryTotal" resultType="int">
 		select count(*) from ins_order
         <where>
-            <if test="status != null">`status` = #{status}</if>
+            <if test="status != null">`status` IN
+                <foreach item="status" collection="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
             <if test="belong != null">AND `belong` = #{belong}</if>
             <if test="userId != null">AND `userId` = #{userId}</if>
             <if test="ccuSn != null">AND `ccu_sn` = #{ccuSn}</if>
