@@ -28,10 +28,10 @@ public class AlarmMsgReceiverTest {
         AlarmMsg pushMsg = new AlarmMsg();
         pushMsg.setAlert("测试");
         pushMsg.setAlarmType("00");
-        pushMsg.setCcSn("B000000000");
+        pushMsg.setCcSn("B00G2H65Q6");
         pushMsg.setContent("测试消息~~~~~~~");
         pushMsg.setFirmFlag("rq");
-        pushMsg.setUserId("165");
+        pushMsg.setUserId("4");
 
         ObjectMapper mapper = new ObjectMapper();
         String message = null;
@@ -50,7 +50,7 @@ public class AlarmMsgReceiverTest {
         pushMsg.setStatus("SUCCESS");
         pushMsg.setTrxNo("00000000000123123");
         pushMsg.setMerchantOrderNo("1111111111111111111");
-        pushMsg.setOrderAmount(new BigDecimal(9.8) );
+        pushMsg.setOrderAmount(new BigDecimal(String.valueOf(9.8)));
         ObjectMapper mapper = new ObjectMapper();
         String message = null;
         try {

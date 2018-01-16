@@ -18,9 +18,9 @@ insurance:
       image:
         storage:
           path:
-            root: /home/rkAdmin/nfs-data/images/insurance-res/
-            bill: /home/rkAdmin/nfs-data/images/insurance-res/pic/bill
-            scooter: /home/rkAdmin/nfs-data/images/insurance-res/pic/scooter
+            root: /Users/caoyangyang/caoyy/server_workspace/insurance/
+            bill: /Users/caoyangyang/caoyy/server_workspace/insurance/insurance-res/pic/bill
+            scooter: /Users/caoyangyang/caoyy/server_workspace/insurance/insurance-res/pic/scooter
         request:
           urlPrefix:
             bill: http://cjl3.rokyinfo.net:8110/res/pic/bill/
