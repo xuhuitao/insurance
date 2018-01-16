@@ -120,6 +120,17 @@ public class OrderController {
     }
 
     /**
+     * 获取支付信息
+     * @param orderNo
+     * @return
+     */
+    @ApiOperation(value = "获取支付信息", notes = "")
+    @RequestMapping(value = "/payinfo-web", method = RequestMethod.GET)
+    public R payInfo(@RequestParam String orderNo) throws IOException {
+        return orderService.payInfo(orderNo);
+    }
+
+    /**
      * 修改
      */
     @ApiOperation(value = "修改", notes = "")

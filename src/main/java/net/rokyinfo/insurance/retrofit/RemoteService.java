@@ -29,6 +29,16 @@ public class RemoteService {
         return null;
     }
 
+    public String createPayInfo(Long payChannelId, String payType, String orderId, ChargeProductEntity productEntity) throws IOException {
+        Call<ResponseBody> createPayOrderCall = retrofitWrapper.getOrderApi().createPayInfo(payChannelId,
+                payType, orderId, "88880000000000000002", productEntity);
+        Response<ResponseBody> createPayOrderResp = createPayOrderCall.execute();
+        if (createPayOrderResp.isSuccessful()) {
+            return createPayOrderResp.body().string();
+        }
+        return null;
+    }
+
     public List<Ebike> getEbikeList(List<String> ccuList) throws IOException {
         RequestBody rawBody = RequestBody.create(MediaType.parse("application/json"), JacksonUtil.toJSon(ccuList));
         Call<List<Ebike>> ebikeList = retrofitWrapper.getEbikeApi().getEbikeList(rawBody);

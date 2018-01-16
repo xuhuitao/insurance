@@ -33,6 +33,8 @@
         <result property="activationTime" column="activation_time"/>
         <result property="expirationTime" column="expiration_time"/>
         <result property="userId" column="userId"/>
+        <result property="solutionId" column="solution_id"/>
+        <result property="productId" column="product_id"/>
         <result property="billImg" column="bill_img" typeHandler="net.rokyinfo.insurance.config.UrlTypeHandler"/>
 
         <result property="scooterImg" column="scooter_img"

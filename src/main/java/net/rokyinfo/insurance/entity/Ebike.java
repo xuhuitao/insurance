@@ -25,6 +25,7 @@ public class Ebike {
     private boolean faultFlag;
     private String simValidityTime;
     private boolean insuranceFlag;
+    //产品方案ID(solutionId)
     private String insuranceId;
 
     public int getStatus() {

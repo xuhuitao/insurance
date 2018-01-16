@@ -48,11 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/v1.0/solutions").permitAll()
                 // 对订单列表放行
                 .antMatchers(HttpMethod.GET,"/v1.0/orders").permitAll()
+                .antMatchers(HttpMethod.GET,"/v1.0/orders/payinfo-web").permitAll()
                 // 对订单列表放行
                 .antMatchers(HttpMethod.POST,"/v1.0/orders").permitAll()
                 // 对注册接口放行
                 .antMatchers(HttpMethod.POST, "/v1.0/users/save").permitAll()
                 .antMatchers(HttpMethod.GET, "/v1.0/orders/excel").permitAll()
+                .antMatchers(HttpMethod.GET, "/v1.0/ebike/detail").permitAll()
                 // 所有请求需要身份认证
                 .anyRequest().authenticated()
                 .and()

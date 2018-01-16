@@ -14,6 +14,9 @@ public interface RemoteApi {
     Call<ResponseBody> createPayOrder(@Header("X-USER-ID") String userId, @Query("payChannelId") Long payChannelId, @Query("payType") String payType,
                                                 @Query("amount") double amount, @Query("orderId") String orderId, @Query("merchantNo") String merchantNo, @Body ChargeProductEntity productEntity);
 
+    @POST("/v3.1/gateway/create-pay-info-web")
+    Call<ResponseBody> createPayInfo(@Query("payChannelId") Long payChannelId, @Query("payType") String payType,
+                                     @Query("orderId") String orderId, @Query("merchantNo") String merchantNo, @Body ChargeProductEntity productEntity);
 
     @POST("/v3.1/ebikes/last-status")
     Call<List<Ebike>> getEbikeList(@Body RequestBody requestBody);
