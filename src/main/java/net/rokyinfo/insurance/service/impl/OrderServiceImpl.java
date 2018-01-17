@@ -90,8 +90,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderEntity> queryListByStatusArray(Map<String, Object> map) {
+        return orderDao.queryListByStatusArray(map);
+    }
+
+    @Override
     public int queryTotal(Map<String, Object> map) {
         return orderDao.queryTotal(map);
+    }
+
+    @Override
+    public int queryTotalByStatusArray(Map<String, Object> map) {
+        return orderDao.queryTotalByStatusArray(map);
     }
 
     @Override

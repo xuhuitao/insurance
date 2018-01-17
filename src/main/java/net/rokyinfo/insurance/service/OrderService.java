@@ -23,7 +23,11 @@ public interface OrderService {
 
     List<OrderEntity> queryList(Map<String, Object> map);
 
+    List<OrderEntity> queryListByStatusArray(Map<String, Object> map);
+
     int queryTotal(Map<String, Object> map);
+
+    int queryTotalByStatusArray(Map<String, Object> map);
 
     void save(OrderEntity insOrder);
 

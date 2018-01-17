@@ -78,7 +78,7 @@
         </if>
     </select>
 
-    <select id="queryList" resultMap="insOrderMap">
+    <select id="queryListByStatusArray" resultMap="insOrderMap">
         select * from ins_order
         <where>
             <if test="status != null">`status` IN
@@ -104,7 +104,7 @@
         </if>
     </select>
 
-    <select id="queryTotal" resultType="int">
+    <select id="queryTotalByStatusArray" resultType="int">
 		select count(*) from ins_order
         <where>
             <if test="status != null">`status` IN
@@ -118,6 +118,39 @@
             <if test="applicant != null">AND `applicant` = #{applicant}</if>
         </where>
 	</select>
+
+    <select id="queryList" resultMap="insOrderMap">
+        select * from ins_order
+        <where>
+            <if test="status != null">`status` = #{status}</if>
+            <if test="belong != null">AND `belong` = #{belong}</if>
+            <if test="userId != null">AND `userId` = #{userId}</if>
+            <if test="ccuSn != null">AND `ccu_sn` = #{ccuSn}</if>
+            <if test="applicant != null">AND `applicant` = #{applicant}</if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from ins_order
+        <where>
+            <if test="status != null">`status` = #{status}</if>
+            <if test="belong != null">AND `belong` = #{belong}</if>
+            <if test="userId != null">AND `userId` = #{userId}</if>
+            <if test="ccuSn != null">AND `ccu_sn` = #{ccuSn}</if>
+            <if test="applicant != null">AND `applicant` = #{applicant}</if>
+        </where>
+    </select>
 
     <insert id="save" parameterType="net.rokyinfo.insurance.entity.OrderEntity" useGeneratedKeys="true"
             keyProperty="id">
