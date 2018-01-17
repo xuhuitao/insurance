@@ -18,9 +18,9 @@ insurance:
       image:
         storage:
           path:
-            root: /Users/caoyangyang/caoyy/server_workspace/insurance/
-            bill: /Users/caoyangyang/caoyy/server_workspace/insurance/insurance-res/pic/bill
-            scooter: /Users/caoyangyang/caoyy/server_workspace/insurance/insurance-res/pic/scooter
+            root: /home/rkAdmin/nfs-data/images/insurance-res/
+            bill: /home/rkAdmin/nfs-data/images/insurance-res/pic/bill
+            scooter: /home/rkAdmin/nfs-data/images/insurance-res/pic/scooter
         request:
           urlPrefix:
             bill: http://cjl3.rokyinfo.net:8110/res/pic/bill/
@@ -30,4 +30,3 @@ remote:
     url:
      order: http://192.168.102.17:19606
      ebike: http://192.168.102.16:19602
-
