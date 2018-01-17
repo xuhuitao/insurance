@@ -49,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 对订单列表放行
                 .antMatchers(HttpMethod.GET,"/v1.0/orders").permitAll()
                 .antMatchers(HttpMethod.GET,"/v1.0/orders/payinfo-web").permitAll()
+                .antMatchers(HttpMethod.PUT,"/v1.0/orders/update").permitAll()
                 // 对订单列表放行
                 .antMatchers(HttpMethod.POST,"/v1.0/orders").permitAll()
                 // 对注册接口放行

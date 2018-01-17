@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     private String scooterImgPath;
 
     @Value("${order.generative.day.limit}")
-    private int dayLimit;
+    private long dayLimit;
 
     @Autowired
     private OrderDao orderDao;
@@ -132,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
         ccuSnList.add(insOrder.getCcuSn());
         List<Ebike> ebikeList = remoteService.getEbikeList(ccuSnList);
         if (ebikeList == null || ebikeList.size() == 0) {
-            throw new RkException("不存在该中控序列号，请核对车辆的中控序列号");
+            throw new RkException("不存在该中控序列号，请核对中控序列号");
         }
 
         Ebike ebike = ebikeList.get(0);
@@ -210,6 +210,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void update(String ccuSn, String orderNo) throws IOException, ParseException {
+
+        if (TextUtils.isEmpty(ccuSn)) {
+            throw new RkException("请指定设备序列号");
+        }
+        if (TextUtils.isEmpty(orderNo)) {
+            throw new RkException("请指定订单号");
+        }
+
         Map<String, Object> params = new HashMap<>();
         params.put("orderNo", orderNo);
         params.put("status", OrderStatus.IN_INSURANCE.getOrderStatusValue());
@@ -222,13 +230,13 @@ public class OrderServiceImpl implements OrderService {
         ccuSnList.add(ccuSn);
         List<Ebike> ebikeList = remoteService.getEbikeList(ccuSnList);
         if (ebikeList == null || ebikeList.size() == 0) {
-            throw new RkException("不存在该中控序列号，请核对车辆的中控序列号");
+            throw new RkException("不存在该中控序列号，请核对中控序列号");
         }
 
         Ebike ebike = ebikeList.get(0);
 
         if (!ebike.isOnline()) {
-            throw new RkException("该车辆已离线，不能生成订单");
+            throw new RkException("设备已离线，不能变更为该设备");
         }
 
         String simValidityTimeStr = ebike.getSimValidityTime();
@@ -248,7 +256,7 @@ public class OrderServiceImpl implements OrderService {
         Date currentDate = new Date();
         long timeInterval = simValidityTime.getTime() - currentDate.getTime();
         boolean isExpire = (timeInterval < 0);
-        long dayLimitMillisecond = dayLimit * 24 * 60 * 60 * 1000;
+        long dayLimitMillisecond = (dayLimit * 24 * 60 * 60 * 1000);
         boolean outOfTimeLimit = (timeInterval > 0 && timeInterval <= dayLimitMillisecond);
         if (isExpire || outOfTimeLimit) {
             return true;
