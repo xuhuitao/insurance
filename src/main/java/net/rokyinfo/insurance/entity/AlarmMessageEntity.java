@@ -1,11 +1,8 @@
 package net.rokyinfo.insurance.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
 import java.util.Date;
-
-
 /**
  * 告警消息表
  * 
@@ -41,6 +38,14 @@ public class AlarmMessageEntity implements Serializable {
 	private Date alarmTime;
 	//所属保险公司ID
 	private Long belong;
+
+	/**
+	 * 保险服务新增字段
+	 */
+	//投保人姓名
+	private String applicant;
+	//手机号码
+	private String phoneNumber;
 
 	/**
 	 * 设置：主键
@@ -173,5 +178,21 @@ public class AlarmMessageEntity implements Serializable {
 	 */
 	public Long getBelong() {
 		return belong;
+	}
+
+	public String getApplicant() {
+		return applicant;
+	}
+
+	public void setApplicant(String applicant) {
+		this.applicant = applicant;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 }

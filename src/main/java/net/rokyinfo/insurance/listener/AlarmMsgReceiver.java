@@ -35,41 +35,43 @@ public class AlarmMsgReceiver {
 
     @RabbitHandler
     public void process(String json) {
-        AlarmMsg alarmMsg = JacksonUtil.readValue(json,AlarmMsg.class);
-        if (alarmMsg == null) {
-            return;
-        }
-        // 存储Message
-        logger.info(alarmMsg.toString());
-        Map<String, Object> params = new HashMap<>();
-        params.put("ccuSn", alarmMsg.getCcSn());
-        List<OrderEntity> orderEntityList = orderService.queryList(params);
-        if (orderEntityList == null || orderEntityList.size() == 0) {
-            return;
-        }
-        OrderEntity inInsuranceOrderEntity = null;
-        for(OrderEntity orderEntity : orderEntityList) {
-            if (orderEntity.getStatus() == OrderStatus.IN_INSURANCE.getOrderStatusValue()) {
-                inInsuranceOrderEntity = orderEntity;
-                break;
+        try {
+            AlarmMsg alarmMsg = JacksonUtil.readValue(json,AlarmMsg.class);
+            if (alarmMsg == null) {
+                return;
             }
+            // 存储Message
+            logger.info(alarmMsg.toString());
+            Map<String, Object> params = new HashMap<>();
+            params.put("ccuSn", alarmMsg.getCcSn());
+            params.put("status", OrderStatus.IN_INSURANCE.getOrderStatusValue());
+            List<OrderEntity> orderEntityList = orderService.queryList(params);
+            if (orderEntityList == null || orderEntityList.size() == 0) {
+                return;
+            }
+            if (orderEntityList.size() != 1) {
+                logger.warn("设备（" + alarmMsg.getCcSn() + "）存在多条处于保障中的订单。" );
+            }
+            OrderEntity inInsuranceOrderEntity = orderEntityList.get(0);
+            AlarmMessageEntity alarmMessageEntity = new AlarmMessageEntity();
+            alarmMessageEntity.setVersion(0);
+            alarmMessageEntity.setCreator("system");
+            alarmMessageEntity.setCcuSn(alarmMsg.getCcSn());
+            if (!TextUtils.isEmpty(alarmMsg.getAlarmType())) {
+                alarmMessageEntity.setAlarmType(Integer.parseInt(alarmMsg.getAlarmType()));
+            }
+            alarmMessageEntity.setContent(alarmMsg.getContent());
+            alarmMessageEntity.setBelong(inInsuranceOrderEntity.getBelong());
+            alarmMessageEntity.setApplicant(inInsuranceOrderEntity.getApplicant());
+            alarmMessageEntity.setPhoneNumber(inInsuranceOrderEntity.getPhoneNumber());
+            Date curTime = new Date();
+            alarmMessageEntity.setCreateTime(curTime);
+            alarmMessageEntity.setAlarmTime(curTime);
+            alarmMessageService.save(alarmMessageEntity);
+        } catch (Exception e) {
+            logger.error("json:" + json);
+            logger.error(e.getMessage());
         }
-        if (inInsuranceOrderEntity == null) {
-            return;
-        }
-        AlarmMessageEntity alarmMessageEntity = new AlarmMessageEntity();
-        alarmMessageEntity.setVersion(0);
-        alarmMessageEntity.setCreator("system");
-        alarmMessageEntity.setCcuSn(alarmMsg.getCcSn());
-        if (!TextUtils.isEmpty(alarmMsg.getAlarmType())) {
-            alarmMessageEntity.setAlarmType(Integer.parseInt(alarmMsg.getAlarmType()));
-        }
-        alarmMessageEntity.setContent(alarmMsg.getContent());
-        alarmMessageEntity.setBelong(inInsuranceOrderEntity.getBelong());
-        Date curTime = new Date();
-        alarmMessageEntity.setCreateTime(curTime);
-        alarmMessageEntity.setAlarmTime(curTime);
-        alarmMessageService.save(alarmMessageEntity);
     }
 
 }
