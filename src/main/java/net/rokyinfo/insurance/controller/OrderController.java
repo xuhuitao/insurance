@@ -66,8 +66,8 @@ public class OrderController {
             String[] statusArray = statusParams.toString().split(",");
             query.put("status", statusArray);
         }
-        List<OrderEntity> insOrderList = orderService.queryList(query);
-        int total = orderService.queryTotal(query);
+        List<OrderEntity> insOrderList = orderService.queryListByStatusArray(query);
+        int total = orderService.queryTotalByStatusArray(query);
 
         PageUtils pageUtil = new PageUtils(insOrderList, total, query.getLimit(), query.getPage());
 
