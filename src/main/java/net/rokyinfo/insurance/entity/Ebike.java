@@ -28,6 +28,12 @@ public class Ebike {
     //产品方案ID(solutionId)
     private String insuranceId;
 
+    /**
+     * 保险服务端新增字段
+     */
+    //投保人
+    private String applicant;
+
     public int getStatus() {
         return status;
     }
@@ -218,5 +224,13 @@ public class Ebike {
 
     public void setInsuranceId(String insuranceId) {
         this.insuranceId = insuranceId;
+    }
+
+    public String getApplicant() {
+        return applicant;
+    }
+
+    public void setApplicant(String applicant) {
+        this.applicant = applicant;
     }
 }

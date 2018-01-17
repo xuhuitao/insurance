@@ -4,12 +4,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.rokyinfo.insurance.entity.Ebike;
-import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.UserEntity;
 import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.exception.RkException;
 import net.rokyinfo.insurance.retrofit.RemoteService;
-import net.rokyinfo.insurance.service.OrderService;
+import net.rokyinfo.insurance.service.EbikeService;
 import net.rokyinfo.insurance.service.UserService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
@@ -19,10 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +34,7 @@ public class EbikeController {
     private UserService userService;
 
     @Autowired
-    private OrderService orderService;
+    private EbikeService ebikeService;
 
     /**
      * 列表
@@ -63,10 +60,8 @@ public class EbikeController {
         //只查询出保障中的保险订单
         query.put("status", OrderStatus.IN_INSURANCE.getOrderStatusValue());
 
-        List<String> orderCcuSnList = orderService.queryCcuSnOfOrder(query);
-
-        List<Ebike> ebikeList = remoteService.getEbikeList(orderCcuSnList);;
-        int total = orderService.queryTotal(query);
+        List<Ebike> ebikeList = ebikeService.queryList(query);
+        int total = ebikeService.queryTotal(query);
 
         PageUtils pageUtil = new PageUtils(ebikeList, total, query.getLimit(), query.getPage());
         return new R<>(pageUtil);
