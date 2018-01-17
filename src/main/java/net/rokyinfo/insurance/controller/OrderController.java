@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +121,7 @@ public class OrderController {
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public R save(@Valid @ModelAttribute OrderEntity insOrder) throws IOException {
+    public R save(@Valid @ModelAttribute OrderEntity insOrder) throws IOException, ParseException {
         return orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
     }
 
@@ -140,9 +141,9 @@ public class OrderController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
-    @PutMapping("")
-    public R update(@RequestBody OrderEntity insOrder) {
-        orderService.update(insOrder);
+    @PutMapping("/update")
+    public R update(@RequestParam String ccuSn, @RequestParam String orderNo) throws IOException, ParseException {
+        orderService.update(ccuSn, orderNo);
         return new R<>();
     }
 

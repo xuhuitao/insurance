@@ -29,7 +29,7 @@ public class AlarmMessageEntity implements Serializable {
 	private Date modifyTime;
 	//设备SN
 	private String ccuSn;
-	//告警类型  0：震动告警 1：断电告警
+	//告警类型  故障告警:0 震动告警:1 内置电池低告警:2 断电告警:4
 	private Integer alarmType;
 	//消息内容
 	private String content;

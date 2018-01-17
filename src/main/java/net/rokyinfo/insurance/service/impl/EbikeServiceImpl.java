@@ -25,13 +25,13 @@ public class EbikeServiceImpl implements EbikeService{
         if (orderEntityList != null && orderEntityList.size() > 0) {
             Map<String, OrderEntity> orderEntityMap = new HashMap<>();
             orderEntityList.forEach(orderEntity -> {
-                orderEntityMap.put(orderEntity.getCcuSn(), orderEntity);
+                orderEntityMap.put(orderEntity.getCcuSn().toUpperCase(), orderEntity);
             });
             List<String> ccuSnList = new ArrayList<>(orderEntityMap.keySet());
             List<Ebike> ebikeList = remoteService.getEbikeList(ccuSnList);
             if (ebikeList != null && ebikeList.size() > 0) {
                 ebikeList.forEach(ebike -> {
-                    OrderEntity orderEntity = orderEntityMap.get(ebike.getCcuSn());
+                    OrderEntity orderEntity = orderEntityMap.get(ebike.getCcuSn().toUpperCase());
                     ebike.setApplicant(orderEntity.getApplicant());
                 });
             }

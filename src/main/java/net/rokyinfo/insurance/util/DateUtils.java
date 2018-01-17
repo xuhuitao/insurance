@@ -1,8 +1,9 @@
 package net.rokyinfo.insurance.util;
 
+import org.apache.http.util.TextUtils;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 /**
  * 日期处理
  *
@@ -28,6 +29,14 @@ public class DateUtils {
         if (date != null) {
             SimpleDateFormat df = new SimpleDateFormat(pattern);
             return df.format(date);
+        }
+        return null;
+    }
+
+    public static Date parse(String date, String pattern) throws ParseException {
+        if (!TextUtils.isEmpty(date)) {
+            SimpleDateFormat df = new SimpleDateFormat(pattern);
+            return df.parse(date);
         }
         return null;
     }
