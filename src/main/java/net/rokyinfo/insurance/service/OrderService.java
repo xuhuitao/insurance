@@ -4,6 +4,7 @@ import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.util.R;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 /**
@@ -31,11 +32,13 @@ public interface OrderService {
 
     void save(OrderEntity insOrder);
 
-    R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException;
+    R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException, ParseException;
 
     R payInfo(String orderNo) throws IOException;
 
     void affirm(Long orderId, Integer dispose);
+
+    void update(String ccuSn, String orderNo) throws IOException, ParseException;
 
     void update(OrderEntity insOrder);
 

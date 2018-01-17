@@ -9,6 +9,7 @@ import net.rokyinfo.insurance.retrofit.RemoteService;
 import net.rokyinfo.insurance.service.OrderService;
 import net.rokyinfo.insurance.service.ProductService;
 import net.rokyinfo.insurance.service.SolutionService;
+import net.rokyinfo.insurance.util.DateUtils;
 import net.rokyinfo.insurance.util.R;
 import net.rokyinfo.insurance.util.Sequence;
 import org.apache.http.util.TextUtils;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 @Service("insOrderService")
@@ -34,6 +36,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Value("${insurance.res.image.storage.path.scooter}")
     private String scooterImgPath;
+
+    @Value("${order.generative.day.limit}")
+    private int dayLimit;
 
     @Autowired
     private OrderDao orderDao;
@@ -111,18 +116,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException {
+    public R save(OrderEntity insOrder, MultipartFile billFile, MultipartFile[] scooterFiles) throws IOException, ParseException {
 
         Map<String, Object> params = new HashMap<>();
         params.put("ccuSn", insOrder.getCcuSn());
-        List<OrderEntity> orderEntityList = orderDao.queryList(params);
+        String[] statusArray = new String[] { String.valueOf(OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue()),
+                String.valueOf(OrderStatus.IN_INSURANCE.getOrderStatusValue())};
+        params.put("status", statusArray);
+        List<OrderEntity> orderEntityList = orderDao.queryListByStatusArray(params);
         if (orderEntityList != null && orderEntityList.size() > 0) {
-            orderEntityList.forEach(orderEntity -> {
-                if (orderEntity.getStatus() == OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue()
-                        || orderEntity.getStatus() == OrderStatus.IN_INSURANCE.getOrderStatusValue()) {
-                    throw new RkException("该中控序列号已存在订单");
-                }
-            });
+            throw new RkException("该中控序列号已存在订单");
         }
 
         List<String> ccuSnList = new ArrayList<>();
@@ -136,6 +139,11 @@ public class OrderServiceImpl implements OrderService {
 
         if (!ebike.isOnline()) {
             throw new RkException("该车辆已离线，不能生成订单");
+        }
+
+        String simValidityTimeStr = ebike.getSimValidityTime();
+        if (isOutOfTimeLimit(simValidityTimeStr)) {
+            throw new RkException("设备SIM卡有效期不在可保险时间内");
         }
 
         boolean existInsurance = false;
@@ -198,6 +206,54 @@ public class OrderServiceImpl implements OrderService {
 
         return new R<>(payOrderString);
 
+    }
+
+    @Override
+    public void update(String ccuSn, String orderNo) throws IOException, ParseException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderNo", orderNo);
+        params.put("status", OrderStatus.IN_INSURANCE.getOrderStatusValue());
+        List<OrderEntity> orderEntityList = orderDao.queryList(params);
+        if (orderEntityList == null || orderEntityList.size() == 0) {
+            throw new RkException("只有保障中的订单才能进行设备更换");
+        }
+
+        List<String> ccuSnList = new ArrayList<>();
+        ccuSnList.add(ccuSn);
+        List<Ebike> ebikeList = remoteService.getEbikeList(ccuSnList);
+        if (ebikeList == null || ebikeList.size() == 0) {
+            throw new RkException("不存在该中控序列号，请核对车辆的中控序列号");
+        }
+
+        Ebike ebike = ebikeList.get(0);
+
+        if (!ebike.isOnline()) {
+            throw new RkException("该车辆已离线，不能生成订单");
+        }
+
+        String simValidityTimeStr = ebike.getSimValidityTime();
+        if (isOutOfTimeLimit(simValidityTimeStr)) {
+            throw new RkException("设备SIM卡有效期不在可保险时间内");
+        }
+
+        OrderEntity orderEntity = orderEntityList.get(0);
+        OrderEntity updateOrderEntity = new OrderEntity();
+        updateOrderEntity.setId(orderEntity.getId());
+        updateOrderEntity.setCcuSn(ccuSn);
+        orderDao.update(updateOrderEntity);
+    }
+
+    private boolean isOutOfTimeLimit(String simValidityTimeStr) throws ParseException {
+        Date simValidityTime = DateUtils.parse(simValidityTimeStr, DateUtils.DATE_PATTERN);
+        Date currentDate = new Date();
+        long timeInterval = simValidityTime.getTime() - currentDate.getTime();
+        boolean isExpire = (timeInterval < 0);
+        long dayLimitMillisecond = dayLimit * 24 * 60 * 60 * 1000;
+        boolean outOfTimeLimit = (timeInterval > 0 && timeInterval <= dayLimitMillisecond);
+        if (isExpire || outOfTimeLimit) {
+            return true;
+        }
+        return false;
     }
 
     @Override
