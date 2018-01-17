@@ -30,3 +30,8 @@ remote:
     url:
      order: http://192.168.102.17:19606
      ebike: http://192.168.102.16:19602
+
+order:
+    generative:
+      day:
+       limit: 90
