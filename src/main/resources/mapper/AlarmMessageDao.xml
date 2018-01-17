@@ -16,6 +16,8 @@
         <result property="content" column="content"/>
         <result property="alarmTime" column="alarm_time"/>
         <result property="belong" column="belong"/>
+		<result property="applicant" column="applicant"/>
+		<result property="phoneNumber" column="phone_number"/>
     </resultMap>
 
 	<select id="queryObject" resultType="net.rokyinfo.insurance.entity.AlarmMessageEntity">
@@ -59,7 +61,9 @@
 			`alarm_type`, 
 			`content`, 
 			`alarm_time`, 
-			`belong`
+			`belong`,
+			`applicant`,
+			`phone_number`
 		)
 		values
 		(
@@ -72,7 +76,9 @@
 			#{alarmType}, 
 			#{content}, 
 			#{alarmTime}, 
-			#{belong}
+			#{belong},
+			#{applicant},
+			#{phoneNumber}
 		)
 	</insert>
 	 
@@ -89,6 +95,8 @@
 			<if test="content != null">`content` = #{content}, </if>
 			<if test="alarmTime != null">`alarm_time` = #{alarmTime}, </if>
 			<if test="belong != null">`belong` = #{belong}</if>
+			<if test="applicant != null">`applicant` = #{applicant}</if>
+			<if test="phoneNumber != null">`phone_number` = #{phoneNumber}</if>
 		</set>
 		where id = #{id}
 	</update>
