@@ -32,7 +32,7 @@ insurance:
 
 remote:
     service:
-      url: http://cjl3.rokyinfo.net:8010
+      url: http://192.168.102.16:8010
 
 order:
     generative:

@@ -21,4 +21,7 @@ public interface RemoteApi {
     @POST("/api-ebike/v3.1/ebikes/last-status")
     Call<List<Ebike>> getEbikeList(@Body RequestBody requestBody);
 
+    @GET("/api-pay/v3.1/gateway/refund")
+    Call<ResponseBody> refundByOrderNo(@Query("orderNo") String orderNo, @Query("merchantNo") String merchantNo);
+
 }

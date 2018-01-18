@@ -49,4 +49,24 @@ public class RemoteService {
         return null;
     }
 
+    public RetrofitResponse refundByOrderNo(String orderId) throws IOException {
+        Call<ResponseBody> responseBodyCall = retrofitWrapper.getRemoteApi().refundByOrderNo(orderId, "88880000000000000002");
+        Response<ResponseBody> responseBodyResponse = responseBodyCall.execute();
+
+        RetrofitResponse retrofitResponse = new RetrofitResponse();
+        retrofitResponse.setStatusCode(responseBodyResponse.code());
+
+        if (responseBodyResponse.isSuccessful()) {
+            if (responseBodyResponse.body() != null) {
+                retrofitResponse.setMessage(responseBodyResponse.body().toString());
+            }
+        } else {
+            if (responseBodyResponse.errorBody() != null) {
+                retrofitResponse.setMessage(responseBodyResponse.errorBody().toString());
+            }
+        }
+
+        return retrofitResponse;
+    }
+
 }
