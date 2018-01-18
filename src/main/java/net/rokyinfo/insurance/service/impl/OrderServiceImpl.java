@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
     private final Sequence excelSequence = new Sequence(0, 0);
 
     @Override
-    public void affirm(Long orderId, Integer dispose) {
+    public void affirm(Long orderId, Integer dispose) throws IOException {
         OrderEntity orderEntity = orderDao.queryObject(orderId);
         if (orderEntity == null) {
             throw new RkException("不存在该订单");
@@ -74,11 +74,17 @@ public class OrderServiceImpl implements OrderService {
             throw new RkException("不是支付待审核的订单");
         }
         if (dispose == OrderDispose.REFUSE.getOrderDisposeValue()) {
-            orderEntity.setStatus(OrderStatus.REFUSE_AND_UNREFUND.getOrderStatusValue());
-            orderDao.update(orderEntity);
+            OrderEntity updateOrderEntity = new OrderEntity();
+            updateOrderEntity.setId(orderEntity.getId());
+            updateOrderEntity.setStatus(OrderStatus.REFUSE_AND_UNREFUND.getOrderStatusValue());
+            orderDao.update(updateOrderEntity);
+
+            remoteService.refundByOrderNo(orderEntity.getOrderNo());
         } else if (dispose == OrderDispose.PASS.getOrderDisposeValue()) {
-            orderEntity.setStatus(OrderStatus.IN_INSURANCE.getOrderStatusValue());
-            orderDao.update(orderEntity);
+            OrderEntity updateOrderEntity = new OrderEntity();
+            updateOrderEntity.setId(orderEntity.getId());
+            updateOrderEntity.setStatus(OrderStatus.IN_INSURANCE.getOrderStatusValue());
+            orderDao.update(updateOrderEntity);
         } else {
             throw new RkException("非法的订单操作，只能是通过或者拒绝操作");
         }
@@ -318,7 +324,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String generateExcel(Map<String, Object> map) {
 
-        List<OrderEntity> orderEntityList = orderDao.queryList(map);
+        List<OrderEntity> orderEntityList = orderDao.queryListByStatusArray(map);
         Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), OrderEntity.class, orderEntityList);
 
         String fileName = "insurance-order-" + excelSequence.nextId() + ".xls";

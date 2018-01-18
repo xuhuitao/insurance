@@ -36,7 +36,7 @@ public interface OrderService {
 
     R payInfo(String orderNo) throws IOException;
 
-    void affirm(Long orderId, Integer dispose);
+    void affirm(Long orderId, Integer dispose) throws IOException;
 
     void update(String ccuSn, String orderNo) throws IOException, ParseException;
 

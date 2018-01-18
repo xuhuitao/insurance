@@ -12,6 +12,7 @@ import net.rokyinfo.insurance.service.UserService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
+import org.apache.http.util.TextUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jeecgframework.poi.excel.ExcelExportUtil;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -92,20 +93,21 @@ public class OrderController {
     @ApiOperation(value = "审批", notes = "")
     @ApiImplicitParam(name = "id", value = "", required = true, dataType = "Integer", paramType = "path")
     @PutMapping("/{id}")
-    public R affirm(@PathVariable("id") Long id, @RequestParam Integer dispose) {
+    public R affirm(@PathVariable("id") Long id, @RequestParam Integer dispose) throws IOException {
         orderService.affirm(id, dispose);
         return new R<>();
     }
 
     @GetMapping("/excel")
-    public R exportExcel(@RequestParam(required = false) Integer status, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public R exportExcel(@RequestParam(required = false) String status, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
         Map<String, Object> params = new HashMap<>(2);
         params.put("belong", user.getBelong());
-        if (status != null) {
-            params.put("status", status);
+        if (!TextUtils.isEmpty(status)) {
+            String[] statusArray = status.split(",");
+            params.put("status", statusArray);
         }
 
         Excel excel = new Excel();
