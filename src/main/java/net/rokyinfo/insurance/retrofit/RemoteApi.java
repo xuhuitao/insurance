@@ -10,15 +10,15 @@ import java.util.List;
 
 public interface RemoteApi {
 
-    @POST("/v3.1/gateway/create-pay-order-web")
+    @POST("/api-pay/v3.1/gateway/create-pay-order-web")
     Call<ResponseBody> createPayOrder(@Header("X-USER-ID") String userId, @Query("payChannelId") Long payChannelId, @Query("payType") String payType,
                                                 @Query("amount") double amount, @Query("orderId") String orderId, @Query("merchantNo") String merchantNo, @Body ChargeProductEntity productEntity);
 
-    @POST("/v3.1/gateway/create-pay-info-web")
+    @POST("/api-pay/v3.1/gateway/create-pay-info-web")
     Call<ResponseBody> createPayInfo(@Query("payChannelId") Long payChannelId, @Query("payType") String payType,
                                      @Query("orderId") String orderId, @Query("merchantNo") String merchantNo, @Body ChargeProductEntity productEntity);
 
-    @POST("/v3.1/ebikes/last-status")
+    @POST("/api-ebike/v3.1/ebikes/last-status")
     Call<List<Ebike>> getEbikeList(@Body RequestBody requestBody);
 
 }

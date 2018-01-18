@@ -28,12 +28,11 @@ insurance:
       excel:
         storage:
           path: /home/rkAdmin/nfs-data/images/insurance-res/excel
-          request: http://cjl3.rokyinfo.net:8110/res/excel/
+        request: http://cjl3.rokyinfo.net:8110/res/excel/
 
 remote:
-    url:
-     order: http://192.168.102.17:19606
-     ebike: http://192.168.102.16:19602
+    service:
+      url: http://cjl3.rokyinfo.net:8010
 
 order:
     generative:

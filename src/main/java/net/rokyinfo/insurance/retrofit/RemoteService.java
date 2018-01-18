@@ -20,7 +20,7 @@ public class RemoteService {
     private RetrofitWrapper retrofitWrapper;
 
     public String createPayOrder(String userId, Long payChannelId, String payType, double amount, String orderId, ChargeProductEntity productEntity) throws IOException {
-        Call<ResponseBody> createPayOrderCall = retrofitWrapper.getOrderApi().createPayOrder(userId, payChannelId,
+        Call<ResponseBody> createPayOrderCall = retrofitWrapper.getRemoteApi().createPayOrder(userId, payChannelId,
                 payType, amount, orderId, "88880000000000000002", productEntity);
         Response<ResponseBody> createPayOrderResp = createPayOrderCall.execute();
         if (createPayOrderResp.isSuccessful()) {
@@ -30,7 +30,7 @@ public class RemoteService {
     }
 
     public String createPayInfo(Long payChannelId, String payType, String orderId, ChargeProductEntity productEntity) throws IOException {
-        Call<ResponseBody> createPayOrderCall = retrofitWrapper.getOrderApi().createPayInfo(payChannelId,
+        Call<ResponseBody> createPayOrderCall = retrofitWrapper.getRemoteApi().createPayInfo(payChannelId,
                 payType, orderId, "88880000000000000002", productEntity);
         Response<ResponseBody> createPayOrderResp = createPayOrderCall.execute();
         if (createPayOrderResp.isSuccessful()) {
@@ -41,7 +41,7 @@ public class RemoteService {
 
     public List<Ebike> getEbikeList(List<String> ccuList) throws IOException {
         RequestBody rawBody = RequestBody.create(MediaType.parse("application/json"), JacksonUtil.toJSon(ccuList));
-        Call<List<Ebike>> ebikeList = retrofitWrapper.getEbikeApi().getEbikeList(rawBody);
+        Call<List<Ebike>> ebikeList = retrofitWrapper.getRemoteApi().getEbikeList(rawBody);
         Response<List<Ebike>> response = ebikeList.execute();
         if (response.isSuccessful()) {
             return response.body();
