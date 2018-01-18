@@ -324,7 +324,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String generateExcel(Map<String, Object> map) {
 
-        List<OrderEntity> orderEntityList = orderDao.queryList(map);
+        List<OrderEntity> orderEntityList = orderDao.queryListByStatusArray(map);
         Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), OrderEntity.class, orderEntityList);
 
         String fileName = "insurance-order-" + excelSequence.nextId() + ".xls";
