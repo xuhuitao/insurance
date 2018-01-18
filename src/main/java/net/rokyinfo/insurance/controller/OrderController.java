@@ -3,6 +3,7 @@ package net.rokyinfo.insurance.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.rokyinfo.insurance.entity.Excel;
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.UserEntity;
 import net.rokyinfo.insurance.json.JSON;
@@ -97,22 +98,20 @@ public class OrderController {
     }
 
     @GetMapping("/excel")
-    public void exportExcel(@RequestParam(required = false) Integer status, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // 告诉浏览器用什么软件可以打开此文件
-        response.setHeader("content-Type", "application/vnd.ms-excel");
-        // 下载文件的默认名称
-        response.setHeader("Content-Disposition", "attachment;filename=insurance-order.xls");
+    public R exportExcel(@RequestParam(required = false) Integer status, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-//        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-//        UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
-        Map<String, Object> params = new HashMap<>();
-//        params.put("belong", user.getBelong());
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
+        Map<String, Object> params = new HashMap<>(2);
+        params.put("belong", user.getBelong());
         if (status != null) {
             params.put("status", status);
         }
-        List<OrderEntity> orderEntityList = orderService.queryList(params);
-        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), OrderEntity.class, orderEntityList);
-        workbook.write(response.getOutputStream());
+
+        Excel excel = new Excel();
+        excel.setUrl(orderService.generateExcel(params));
+        return new R<>(excel);
+
     }
 
     /**

@@ -13,6 +13,9 @@ import net.rokyinfo.insurance.util.DateUtils;
 import net.rokyinfo.insurance.util.R;
 import net.rokyinfo.insurance.util.Sequence;
 import org.apache.http.util.TextUtils;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.jeecgframework.poi.excel.ExcelExportUtil;
+import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.util.*;
 
@@ -36,6 +38,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Value("${insurance.res.image.storage.path.scooter}")
     private String scooterImgPath;
+
+    @Value("${insurance.res.excel.storage.path}")
+    private String excelPath;
+
+    @Value("${insurance.res.excel.request}")
+    private String excelUrl;
 
     @Value("${order.generative.day.limit}")
     private long dayLimit;
@@ -53,6 +61,8 @@ public class OrderServiceImpl implements OrderService {
     private RemoteService remoteService;
 
     private final Sequence payOrderNoSequence = new Sequence(0, 0);
+
+    private final Sequence excelSequence = new Sequence(0, 0);
 
     @Override
     public void affirm(Long orderId, Integer dispose) {
@@ -303,6 +313,39 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void update(OrderEntity insOrder) {
         orderDao.update(insOrder);
+    }
+
+    @Override
+    public String generateExcel(Map<String, Object> map) {
+
+        List<OrderEntity> orderEntityList = orderDao.queryList(map);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), OrderEntity.class, orderEntityList);
+
+        String fileName = "insurance-order-" + excelSequence.nextId() + ".xls";
+        String fullFileName = excelPath + fileName;
+        File file = new File(fullFileName);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        OutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(file);
+            workbook.write(outputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return excelUrl + fileName;
     }
 
     @Override
