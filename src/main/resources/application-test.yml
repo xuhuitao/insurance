@@ -25,6 +25,10 @@ insurance:
           urlPrefix:
             bill: http://cjl3.rokyinfo.net:8110/res/pic/bill/
             scooter: http://cjl3.rokyinfo.net:8110/res/pic/scooter/
+      excel:
+        storage:
+          path: /home/rkAdmin/nfs-data/images/insurance-res/excel
+          request: http://cjl3.rokyinfo.net:8110/res/excel/
 
 remote:
     url:

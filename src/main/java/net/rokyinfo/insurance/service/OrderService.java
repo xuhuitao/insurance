@@ -45,4 +45,6 @@ public interface OrderService {
     void delete(Long id);
 
     void deleteBatch(Long[] ids);
+
+    String generateExcel(Map<String, Object> map);
 }

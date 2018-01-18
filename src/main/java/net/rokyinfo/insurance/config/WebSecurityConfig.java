@@ -54,7 +54,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/v1.0/orders").permitAll()
                 // 对注册接口放行
                 .antMatchers(HttpMethod.POST, "/v1.0/users/save").permitAll()
-                .antMatchers(HttpMethod.GET, "/v1.0/orders/excel").permitAll()
                 .antMatchers(HttpMethod.GET, "/v1.0/ebike/detail").permitAll()
                 // 所有请求需要身份认证
                 .anyRequest().authenticated()
