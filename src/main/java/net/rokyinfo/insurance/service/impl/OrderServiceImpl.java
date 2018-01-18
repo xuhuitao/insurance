@@ -322,8 +322,7 @@ public class OrderServiceImpl implements OrderService {
         Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), OrderEntity.class, orderEntityList);
 
         String fileName = "insurance-order-" + excelSequence.nextId() + ".xls";
-        String fullFileName = excelPath + fileName;
-        File file = new File(fullFileName);
+        File file = new File(excelPath, fileName);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
