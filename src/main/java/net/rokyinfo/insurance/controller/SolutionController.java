@@ -3,6 +3,7 @@ package net.rokyinfo.insurance.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.rokyinfo.insurance.annotation.SysLog;
 import net.rokyinfo.insurance.entity.SolutionEntity;
 import net.rokyinfo.insurance.service.SolutionService;
 import net.rokyinfo.insurance.util.PageUtils;
@@ -11,10 +12,8 @@ import net.rokyinfo.insurance.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
 import java.util.List;
 import java.util.Map;
-
 /**
  * 保险产品方案表
  *
@@ -72,6 +71,7 @@ public class SolutionController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insSolution", value = "", required = true, dataType = "SolutionEntity")
+    @SysLog("新增保险产品方案")
     @PostMapping("")
     public R save(@RequestBody SolutionEntity insSolution) {
         solutionService.save(insSolution);
@@ -84,6 +84,7 @@ public class SolutionController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insSolution", value = "", required = true, dataType = "SolutionEntity")
+    @SysLog("修改保险产品方案")
     @PutMapping("")
     public R update(@RequestBody SolutionEntity insSolution) {
         solutionService.update(insSolution);
@@ -96,6 +97,7 @@ public class SolutionController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
+    @SysLog("删除保险产品方案")
     @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         solutionService.deleteBatch(ids);

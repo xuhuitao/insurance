@@ -3,9 +3,11 @@ package net.rokyinfo.insurance.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.rokyinfo.insurance.annotation.SysLog;
 import net.rokyinfo.insurance.entity.Excel;
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.UserEntity;
+import net.rokyinfo.insurance.exception.RkException;
 import net.rokyinfo.insurance.json.JSON;
 import net.rokyinfo.insurance.service.OrderService;
 import net.rokyinfo.insurance.service.UserService;
@@ -13,9 +15,6 @@ import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
 import org.apache.http.util.TextUtils;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.jeecgframework.poi.excel.ExcelExportUtil;
-import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -92,6 +91,7 @@ public class OrderController {
 
     @ApiOperation(value = "审批", notes = "")
     @ApiImplicitParam(name = "id", value = "", required = true, dataType = "Integer", paramType = "path")
+    @SysLog("审批保险订单")
     @PutMapping("/{id}")
     public R affirm(@PathVariable("id") Long id, @RequestParam Integer dispose) throws IOException {
         orderService.affirm(id, dispose);
@@ -103,6 +103,11 @@ public class OrderController {
 
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
+
+        if (user == null) {
+            throw new RkException("不存在该用户");
+        }
+
         Map<String, Object> params = new HashMap<>(2);
         params.put("belong", user.getBelong());
         if (!TextUtils.isEmpty(status)) {
@@ -121,6 +126,7 @@ public class OrderController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
+    @SysLog("新增保险订单")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public R save(@Valid @ModelAttribute OrderEntity insOrder) throws IOException, ParseException {
         return orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
@@ -142,6 +148,7 @@ public class OrderController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
+    @SysLog("变更设备")
     @PutMapping("/update")
     public R update(@RequestParam String ccuSn, @RequestParam String orderNo) throws IOException, ParseException {
         orderService.update(ccuSn, orderNo);
@@ -153,6 +160,7 @@ public class OrderController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
+    @SysLog("删除保险订单")
     @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         orderService.deleteBatch(ids);

@@ -66,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void affirm(Long orderId, Integer dispose) throws IOException {
+
         OrderEntity orderEntity = orderDao.queryObject(orderId);
         if (orderEntity == null) {
             throw new RkException("不存在该订单");
@@ -73,20 +74,34 @@ public class OrderServiceImpl implements OrderService {
         if (orderEntity.getStatus() != OrderStatus.PAYED_TO_VERIFY.getOrderStatusValue()) {
             throw new RkException("不是支付待审核的订单");
         }
+
         if (dispose == OrderDispose.REFUSE.getOrderDisposeValue()) {
+
             OrderEntity updateOrderEntity = new OrderEntity();
             updateOrderEntity.setId(orderEntity.getId());
             updateOrderEntity.setStatus(OrderStatus.REFUSE_AND_UNREFUND.getOrderStatusValue());
             orderDao.update(updateOrderEntity);
 
             remoteService.refundByOrderNo(orderEntity.getOrderNo());
+
         } else if (dispose == OrderDispose.PASS.getOrderDisposeValue()) {
+
             OrderEntity updateOrderEntity = new OrderEntity();
             updateOrderEntity.setId(orderEntity.getId());
             updateOrderEntity.setStatus(OrderStatus.IN_INSURANCE.getOrderStatusValue());
+            updateOrderEntity.setActivationTime(new Date());
+            SolutionEntity solutionEntity = updateOrderEntity.getSolutionEntity();
+            if (solutionEntity == null) {
+                throw new RkException("订单异常，该订单不存在保险产品方案");
+            }
+            Date expirationTime = DateUtils.addMonth(updateOrderEntity.getActivationTime(), solutionEntity.getIndate());
+            updateOrderEntity.setExpirationTime(expirationTime);
             orderDao.update(updateOrderEntity);
+
         } else {
+
             throw new RkException("非法的订单操作，只能是通过或者拒绝操作");
+
         }
     }
 

@@ -3,6 +3,7 @@ package net.rokyinfo.insurance.util;
 import org.apache.http.util.TextUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 /**
  * 日期处理
@@ -40,4 +41,12 @@ public class DateUtils {
         }
         return null;
     }
+
+    public static Date addMonth(Date date, int monthNum) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, monthNum);
+        return calendar.getTime();
+    }
+
 }

@@ -3,6 +3,7 @@ package net.rokyinfo.insurance.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.rokyinfo.insurance.annotation.SysLog;
 import net.rokyinfo.insurance.entity.ProductEntity;
 import net.rokyinfo.insurance.service.ProductService;
 import net.rokyinfo.insurance.util.PageUtils;
@@ -71,6 +72,7 @@ public class ProductController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insProduct", value = "", required = true, dataType = "ProductEntity")
+    @SysLog("新增保险产品")
     @PostMapping("")
     public R save(@RequestBody ProductEntity insProduct) {
         productService.save(insProduct);
@@ -83,6 +85,7 @@ public class ProductController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insProduct", value = "", required = true, dataType = "ProductEntity")
+    @SysLog("修改保险产品")
     @PutMapping("")
     public R update(@RequestBody ProductEntity insProduct) {
         productService.update(insProduct);
@@ -95,6 +98,7 @@ public class ProductController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
+    @SysLog("删除保险产品")
     @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         productService.deleteBatch(ids);
