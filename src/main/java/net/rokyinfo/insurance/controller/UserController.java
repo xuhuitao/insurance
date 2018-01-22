@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.rokyinfo.insurance.entity.UserEntity;
+import net.rokyinfo.insurance.exception.RkException;
 import net.rokyinfo.insurance.service.UserService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
@@ -14,10 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
 import java.util.List;
 import java.util.Map;
-
 /**
  * 用户表
  *
@@ -76,6 +75,10 @@ public class UserController {
     public R detail() {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
+
+        if (user == null) {
+            throw new RkException("不存在该用户");
+        }
 
         return new R<>(user);
     }

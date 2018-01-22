@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.rokyinfo.insurance.entity.UserEntity;
+import net.rokyinfo.insurance.exception.RkException;
 import net.rokyinfo.insurance.service.UserService;
 import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
@@ -51,6 +52,11 @@ public class AlarmMessageController {
 
 		UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 		UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
+
+		if (user == null) {
+			throw new RkException("不存在该用户");
+		}
+
 		query.put("belong", user.getBelong());
 
 		List<AlarmMessageEntity> alarmMessageList = alarmMessageService.queryList(query);

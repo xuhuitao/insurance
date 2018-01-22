@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import net.rokyinfo.insurance.entity.Excel;
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.UserEntity;
+import net.rokyinfo.insurance.exception.RkException;
 import net.rokyinfo.insurance.json.JSON;
 import net.rokyinfo.insurance.service.OrderService;
 import net.rokyinfo.insurance.service.UserService;
@@ -13,9 +14,6 @@ import net.rokyinfo.insurance.util.PageUtils;
 import net.rokyinfo.insurance.util.Query;
 import net.rokyinfo.insurance.util.R;
 import org.apache.http.util.TextUtils;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.jeecgframework.poi.excel.ExcelExportUtil;
-import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -103,6 +101,11 @@ public class OrderController {
 
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
+
+        if (user == null) {
+            throw new RkException("不存在该用户");
+        }
+
         Map<String, Object> params = new HashMap<>(2);
         params.put("belong", user.getBelong());
         if (!TextUtils.isEmpty(status)) {

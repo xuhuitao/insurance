@@ -55,6 +55,10 @@ public class EbikeController {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = userService.queryUserByUserName(token.getPrincipal().toString());
 
+        if (user == null) {
+            throw new RkException("不存在该用户");
+        }
+
         //该用户所属保险公司
         query.put("belong", user.getBelong());
         //只查询出保障中的保险订单
