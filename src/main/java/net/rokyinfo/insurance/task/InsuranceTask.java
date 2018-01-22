@@ -27,6 +27,8 @@ public class InsuranceTask {
     @Scheduled(cron = "0 0 0/1 * * ?")
     public void checkOrderIfExpire() {
 
+        logger.info("===========start check expired order===========");
+
         Map<String, Object> params = new HashMap<>(1);
         params.put("status", OrderStatus.IN_INSURANCE.getOrderStatusValue());
         List<OrderEntity> orderEntityList = orderService.queryList(params);
@@ -50,6 +52,8 @@ public class InsuranceTask {
             }
 
         }
+
+        logger.info("===========check expired order success===========");
 
     }
 
