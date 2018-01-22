@@ -80,6 +80,8 @@ public class OrderServiceImpl implements OrderService {
             OrderEntity updateOrderEntity = new OrderEntity();
             updateOrderEntity.setId(orderEntity.getId());
             updateOrderEntity.setStatus(OrderStatus.REFUSE_AND_UNREFUND.getOrderStatusValue());
+            updateOrderEntity.setModifier(CreatorEnum.SYSTEM.getCreator());
+            updateOrderEntity.setModifyTime(new Date());
             orderDao.update(updateOrderEntity);
 
             remoteService.refundByOrderNo(orderEntity.getOrderNo());
@@ -96,6 +98,8 @@ public class OrderServiceImpl implements OrderService {
             }
             Date expirationTime = DateUtils.addMonth(updateOrderEntity.getActivationTime(), solutionEntity.getIndate());
             updateOrderEntity.setExpirationTime(expirationTime);
+            updateOrderEntity.setModifier(CreatorEnum.SYSTEM.getCreator());
+            updateOrderEntity.setModifyTime(new Date());
             orderDao.update(updateOrderEntity);
 
         } else {

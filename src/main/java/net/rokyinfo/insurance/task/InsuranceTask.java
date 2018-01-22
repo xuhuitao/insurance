@@ -1,6 +1,7 @@
 package net.rokyinfo.insurance.task;
 
 import net.rokyinfo.insurance.entity.OrderEntity;
+import net.rokyinfo.insurance.enums.CreatorEnum;
 import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.service.OrderService;
 import org.slf4j.Logger;
@@ -48,6 +49,8 @@ public class InsuranceTask {
             if (!expirationTime.after(currentDate)) {
                 updateOrderEntity.setId(orderEntity.getId());
                 updateOrderEntity.setStatus(OrderStatus.EXPIRE.getOrderStatusValue());
+                updateOrderEntity.setModifier(CreatorEnum.SYSTEM.getCreator());
+                updateOrderEntity.setModifyTime(new Date());
                 orderService.update(updateOrderEntity);
             }
 

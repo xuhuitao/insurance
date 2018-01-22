@@ -3,6 +3,7 @@ package net.rokyinfo.insurance.listener;
 import net.rokyinfo.insurance.entity.AlarmMessageEntity;
 import net.rokyinfo.insurance.entity.AlarmMsg;
 import net.rokyinfo.insurance.entity.OrderEntity;
+import net.rokyinfo.insurance.enums.CreatorEnum;
 import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.service.AlarmMessageService;
 import net.rokyinfo.insurance.service.OrderService;
@@ -67,6 +68,8 @@ public class AlarmMsgReceiver {
             Date curTime = new Date();
             alarmMessageEntity.setCreateTime(curTime);
             alarmMessageEntity.setAlarmTime(curTime);
+            alarmMessageEntity.setModifier(CreatorEnum.SYSTEM.getCreator());
+            alarmMessageEntity.setModifyTime(curTime);
             alarmMessageService.save(alarmMessageEntity);
         } catch (Exception e) {
             logger.error("json:" + json);

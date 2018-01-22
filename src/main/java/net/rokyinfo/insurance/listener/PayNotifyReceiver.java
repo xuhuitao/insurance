@@ -2,6 +2,7 @@ package net.rokyinfo.insurance.listener;
 
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.PayOrderNotifyMsg;
+import net.rokyinfo.insurance.enums.CreatorEnum;
 import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.enums.TradeStatusEnum;
 import net.rokyinfo.insurance.service.OrderService;
@@ -13,6 +14,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import java.util.Date;
 /**
  * @author yuanzhijian
  */
@@ -64,6 +66,8 @@ public class PayNotifyReceiver {
         if (!TextUtils.isEmpty(trxNo)) {
             updateOrderEntity.setTrxNo(trxNo);
         }
+        updateOrderEntity.setModifier(CreatorEnum.SYSTEM.getCreator());
+        updateOrderEntity.setModifyTime(new Date());
         orderService.update(updateOrderEntity);
     }
 
