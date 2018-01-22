@@ -3,6 +3,7 @@ package net.rokyinfo.insurance.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.rokyinfo.insurance.annotation.SysLog;
 import net.rokyinfo.insurance.entity.UserEntity;
 import net.rokyinfo.insurance.exception.RkException;
 import net.rokyinfo.insurance.service.UserService;
@@ -88,6 +89,7 @@ public class UserController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
+    @SysLog("新增用户")
     @PostMapping("")
     public R save(@RequestBody UserEntity user) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -102,6 +104,7 @@ public class UserController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
+    @SysLog("修改用户")
     @PutMapping("")
     public R update(@RequestBody UserEntity user) {
         userService.update(user);
@@ -114,6 +117,7 @@ public class UserController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
+    @SysLog("删除用户")
     @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         userService.deleteBatch(ids);

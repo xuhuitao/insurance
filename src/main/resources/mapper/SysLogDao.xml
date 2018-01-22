@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.rokyinfo.insurance.dao.SysLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="net.rokyinfo.insurance.entity.SysLogEntity" id="sysLogMap">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="operation" column="operation"/>
+        <result property="method" column="method"/>
+        <result property="params" column="params"/>
+        <result property="ip" column="ip"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="net.rokyinfo.insurance.entity.SysLogEntity">
+		select * from sys_log where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="net.rokyinfo.insurance.entity.SysLogEntity">
+		select * from sys_log
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sys_log 
+	</select>
+	 
+	<insert id="save" parameterType="net.rokyinfo.insurance.entity.SysLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_log
+		(
+			`username`, 
+			`operation`, 
+			`method`, 
+			`params`, 
+			`ip`, 
+			`create_time`
+		)
+		values
+		(
+			#{username}, 
+			#{operation}, 
+			#{method}, 
+			#{params}, 
+			#{ip}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="net.rokyinfo.insurance.entity.SysLogEntity">
+		update sys_log 
+		<set>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="operation != null">`operation` = #{operation}, </if>
+			<if test="method != null">`method` = #{method}, </if>
+			<if test="params != null">`params` = #{params}, </if>
+			<if test="ip != null">`ip` = #{ip}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sys_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sys_log where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

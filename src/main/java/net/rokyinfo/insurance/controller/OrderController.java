@@ -3,6 +3,7 @@ package net.rokyinfo.insurance.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.rokyinfo.insurance.annotation.SysLog;
 import net.rokyinfo.insurance.entity.Excel;
 import net.rokyinfo.insurance.entity.OrderEntity;
 import net.rokyinfo.insurance.entity.UserEntity;
@@ -90,6 +91,7 @@ public class OrderController {
 
     @ApiOperation(value = "审批", notes = "")
     @ApiImplicitParam(name = "id", value = "", required = true, dataType = "Integer", paramType = "path")
+    @SysLog("审批保险订单")
     @PutMapping("/{id}")
     public R affirm(@PathVariable("id") Long id, @RequestParam Integer dispose) throws IOException {
         orderService.affirm(id, dispose);
@@ -124,6 +126,7 @@ public class OrderController {
      */
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
+    @SysLog("新增保险订单")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public R save(@Valid @ModelAttribute OrderEntity insOrder) throws IOException, ParseException {
         return orderService.save(insOrder, insOrder.getBillFile(), insOrder.getScooterFiles());
@@ -145,6 +148,7 @@ public class OrderController {
      */
     @ApiOperation(value = "修改", notes = "")
     @ApiImplicitParam(name = "insOrder", value = "", required = true, dataType = "OrderEntity")
+    @SysLog("变更设备")
     @PutMapping("/update")
     public R update(@RequestParam String ccuSn, @RequestParam String orderNo) throws IOException, ParseException {
         orderService.update(ccuSn, orderNo);
@@ -156,6 +160,7 @@ public class OrderController {
      */
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParam(name = "ids", value = "", required = true, dataType = "Long[]")
+    @SysLog("删除保险订单")
     @DeleteMapping("")
     public R delete(@RequestBody Long[] ids) {
         orderService.deleteBatch(ids);
