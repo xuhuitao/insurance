@@ -3,6 +3,7 @@ package net.rokyinfo.insurance.listener;
 import net.rokyinfo.insurance.entity.AlarmMessageEntity;
 import net.rokyinfo.insurance.entity.AlarmMsg;
 import net.rokyinfo.insurance.entity.OrderEntity;
+import net.rokyinfo.insurance.enums.CreatorEnum;
 import net.rokyinfo.insurance.enums.OrderStatus;
 import net.rokyinfo.insurance.service.AlarmMessageService;
 import net.rokyinfo.insurance.service.OrderService;
@@ -55,7 +56,7 @@ public class AlarmMsgReceiver {
             OrderEntity inInsuranceOrderEntity = orderEntityList.get(0);
             AlarmMessageEntity alarmMessageEntity = new AlarmMessageEntity();
             alarmMessageEntity.setVersion(0);
-            alarmMessageEntity.setCreator("system");
+            alarmMessageEntity.setCreator(CreatorEnum.SYSTEM.getCreator());
             alarmMessageEntity.setCcuSn(alarmMsg.getCcSn());
             if (!TextUtils.isEmpty(alarmMsg.getAlarmType())) {
                 alarmMessageEntity.setAlarmType(Integer.parseInt(alarmMsg.getAlarmType()));
