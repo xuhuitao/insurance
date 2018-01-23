@@ -56,7 +56,7 @@ public class AlarmMsgReceiver {
             OrderEntity inInsuranceOrderEntity = orderEntityList.get(0);
             AlarmMessageEntity alarmMessageEntity = new AlarmMessageEntity();
             alarmMessageEntity.setVersion(0);
-            alarmMessageEntity.setCreator("system");
+            alarmMessageEntity.setCreator(CreatorEnum.SYSTEM.getCreator());
             alarmMessageEntity.setCcuSn(alarmMsg.getCcSn());
             if (!TextUtils.isEmpty(alarmMsg.getAlarmType())) {
                 alarmMessageEntity.setAlarmType(Integer.parseInt(alarmMsg.getAlarmType()));
@@ -68,8 +68,6 @@ public class AlarmMsgReceiver {
             Date curTime = new Date();
             alarmMessageEntity.setCreateTime(curTime);
             alarmMessageEntity.setAlarmTime(curTime);
-            alarmMessageEntity.setModifier(CreatorEnum.SYSTEM.getCreator());
-            alarmMessageEntity.setModifyTime(curTime);
             alarmMessageService.save(alarmMessageEntity);
         } catch (Exception e) {
             logger.error("json:" + json);
