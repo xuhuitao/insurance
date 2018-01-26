@@ -92,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
             updateOrderEntity.setId(orderEntity.getId());
             updateOrderEntity.setStatus(OrderStatus.IN_INSURANCE.getOrderStatusValue());
             updateOrderEntity.setActivationTime(new Date());
-            SolutionEntity solutionEntity = updateOrderEntity.getSolutionEntity();
+            SolutionEntity solutionEntity = orderEntity.getSolutionEntity();
             if (solutionEntity == null) {
                 throw new RkException("订单异常，该订单不存在保险产品方案");
             }
