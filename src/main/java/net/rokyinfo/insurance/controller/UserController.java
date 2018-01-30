@@ -90,7 +90,7 @@ public class UserController {
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "user", value = "", required = true, dataType = "UserEntity")
     @SysLog("新增用户")
-    @PostMapping("")
+    @PostMapping("/save")
     public R save(@RequestBody UserEntity user) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword().trim()));
